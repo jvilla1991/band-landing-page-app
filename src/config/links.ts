@@ -76,6 +76,6 @@ export const config: AppConfig = {
   seo: {
     title: "Vxllain - Official Landing Page",
     description: "Official landing page - Listen to music, connect on social media, and stay updated.",
-    url: "https://your-domain.com",
+    url: "https://villxin.com",
   },
 };
