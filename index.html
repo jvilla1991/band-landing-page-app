@@ -2,25 +2,64 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-test.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-test.png" />
+    <link rel="apple-touch-icon" href="/images/favicon-test.png" />
+    <script>
+      // Create zoomed/cropped favicon dynamically
+      (function() {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = function() {
+          // Create canvas for zoomed favicon (2x zoom = crop center 50%)
+          const canvas = document.createElement('canvas');
+          const size = 32; // Favicon size
+          canvas.width = size;
+          canvas.height = size;
+          const ctx = canvas.getContext('2d');
+          
+          // Zoom in by 2x (crop to center 50% of image)
+          const sourceSize = Math.min(img.width, img.height);
+          const sourceX = (img.width - sourceSize) / 2;
+          const sourceY = (img.height - sourceSize) / 2;
+          const zoomFactor = 2; // Zoom in 2x
+          const scaledSize = sourceSize / zoomFactor;
+          const scaledX = sourceX + (sourceSize - scaledSize) / 2;
+          const scaledY = sourceY + (sourceSize - scaledSize) / 2;
+          
+          // Draw zoomed/cropped image
+          ctx.drawImage(img, scaledX, scaledY, scaledSize, scaledSize, 0, 0, size, size);
+          
+          // Update favicon
+          const favicon = document.querySelector("link[rel='icon']") || document.createElement('link');
+          favicon.type = 'image/png';
+          favicon.rel = 'icon';
+          favicon.href = canvas.toDataURL('image/png');
+          if (!document.querySelector("link[rel='icon']")) {
+            document.head.appendChild(favicon);
+          }
+        };
+        img.src = '/images/favicon-test.png';
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Official landing page - Listen to music, connect on social media, and stay updated." />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://your-domain.com/" />
-    <meta property="og:title" content="Vxllain - Official Landing Page" />
+    <meta property="og:url" content="https://villxin.com/" />
+    <meta property="og:title" content="Villxin - Official Landing Page" />
     <meta property="og:description" content="Official landing page - Listen to music, connect on social media, and stay updated." />
     <meta property="og:image" content="/images/og-image.jpg" />
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://your-domain.com/" />
-    <meta property="twitter:title" content="Vxllain - Official Landing Page" />
+    <meta property="twitter:url" content="https://villxin.com/" />
+    <meta property="twitter:title" content="Villxin - Official Landing Page" />
     <meta property="twitter:description" content="Official landing page - Listen to music, connect on social media, and stay updated." />
     <meta property="twitter:image" content="/images/og-image.jpg" />
     
-    <title>Vxllain - Official Landing Page</title>
+    <title>Villxin - Official Landing Page</title>
   </head>
   <body>
     <div id="root"></div>
