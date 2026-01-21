@@ -30,11 +30,11 @@ export interface AppConfig {
 }
 
 export const config: AppConfig = {
-  artistName: "Vxllain",
+  artistName: "Villxin",
   tagline: "Your music, your vibe",
   primaryCTA: {
     label: "Listen Now",
-    href: "https://open.spotify.com/artist/example",
+    href: "https://soundcloud.com/cawkpot",
   },
   website: {
     label: "Website",
@@ -74,8 +74,8 @@ export const config: AppConfig = {
     ogImage: "/images/og-image.jpg",
   },
   seo: {
-    title: "Vxllain - Official Landing Page",
+    title: "Villxin - Official Landing Page",
     description: "Official landing page - Listen to music, connect on social media, and stay updated.",
-    url: "https://your-domain.com",
+    url: "https://villxin.com",
   },
 };
