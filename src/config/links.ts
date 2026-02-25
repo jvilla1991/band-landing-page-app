@@ -34,7 +34,7 @@ export const config: AppConfig = {
   tagline: "Your music, your vibe",
   primaryCTA: {
     label: "Listen Now",
-    href: "https://soundcloud.com/cawkpot",
+    href: "https://soundcloud.com/villxin-music-mi",
   },
   website: {
     label: "Website",
