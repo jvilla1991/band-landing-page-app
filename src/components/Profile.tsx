@@ -1,8 +1,8 @@
 import { config } from '../config/links'
-import LinkButton from './LinkButton'
+import MusicPlayer from './MusicPlayer'
 
 function Profile() {
-  const { artistName, primaryCTA, website, assets } = config
+  const { artistName, music, assets } = config
 
   return (
     <section className="profile">
@@ -17,22 +17,7 @@ function Profile() {
           }}
         />
       </div>
-      <LinkButton
-        href={primaryCTA.href}
-        label={primaryCTA.label}
-        variant="primary"
-      />
-      <div className="website-button-wrapper">
-        <LinkButton
-          href={website.href}
-          label={website.label}
-          variant="secondary"
-          disabled={website.disabled}
-        >
-          <span className="link-button-main">{website.label}</span>
-          <span className="link-button-subtext">Coming Soon</span>
-        </LinkButton>
-      </div>
+      <MusicPlayer title={music.title} tracks={music.tracks} />
     </section>
   )
 }

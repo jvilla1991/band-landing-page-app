@@ -4,12 +4,17 @@ export interface SocialLink {
   status?: string;
 }
 
+export interface MusicTrack {
+  title: string;
+  src: string;
+}
+
 export interface AppConfig {
   artistName: string;
   tagline: string;
-  primaryCTA: {
-    label: string;
-    href: string;
+  music: {
+    title: string;
+    tracks: MusicTrack[];
   };
   website: {
     label: string;
@@ -32,9 +37,22 @@ export interface AppConfig {
 export const config: AppConfig = {
   artistName: "Villxin",
   tagline: "Your music, your vibe",
-  primaryCTA: {
-    label: "Listen Now",
-    href: "https://soundcloud.com/villxin-music-mi",
+  music: {
+    title: "Now Playing",
+    tracks: [
+      {
+        title: "Moonlight (Demo Preview)",
+        src: "/audio/Moonlight (Demo).wav",
+      },
+      {
+        title: "Freed From Chains (Demo Preview)",
+        src: "/audio/Freed From Chains (Demo).wav",
+      },
+      {
+        title: "Up In Smoke (Demo Preview)",
+        src: "/audio/Up In Smoke (Demo).wav",
+      },
+    ],
   },
   website: {
     label: "Website",
