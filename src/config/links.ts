@@ -41,7 +41,7 @@ export const config: AppConfig = {
     title: "Now Playing",
     tracks: [
       {
-        title: "Moonlight (Demo Preview)",
+        title: "Moonlight (COMING SOON)",
         src: "/audio/Moonlight (Demo).wav",
       },
       {
@@ -87,7 +87,7 @@ export const config: AppConfig = {
     },
   ],
   assets: {
-    logo: "/images/vxllain-logo.png",
+    logo: "/images/villxin-logo.png",
     banner: "/images/villxin-title-2.png",
     ogImage: "/images/og-image.jpg",
   },
