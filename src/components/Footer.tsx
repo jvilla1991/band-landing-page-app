@@ -1,32 +1,44 @@
-import { config } from '../config/links'
-import SocialIcon from './SocialIcon'
+import { site } from '../config/site'
+import { useOpenModal } from '../context/ModalContext'
+import Icon from './Icon'
 
 function Footer() {
-  const { socialLinks } = config
-
-  const shouldUseWhiteOnHover = (platform: string): boolean => {
-    return platform === 'Twitter' || platform === 'X' || platform === 'TikTok'
-  }
+  const openModal = useOpenModal()
+  const year = new Date().getFullYear()
 
   return (
-    <footer className="footer">
-      <div className="footer-socials">
-        {socialLinks.map((link, index) => {
-          const useWhiteOnHover = shouldUseWhiteOnHover(link.label)
-          return (
-            <a
-              key={index}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`footer-social-link${useWhiteOnHover ? ' white-icon' : ''}`}
-              aria-label={link.status || link.label}
-              title={link.status || link.label}
-            >
-              <SocialIcon platform={link.label} />
-            </a>
-          )
-        })}
+    <footer className="ftr">
+      <div className="wrap ftr__in">
+        <div className="ftr__top">
+          <div className="ftr__brand">
+            <img src={site.assets.iconMark} alt="" />
+            <span className="nm">{site.artistName}</span>
+          </div>
+          <div className="ftr__join">
+            <span className="ftr__join-tx">Be first to hear the debut.</span>
+            <button className="btn btn--primary" type="button" onClick={openModal}>
+              Join the mailing list
+              <span className="arr" style={{ width: 16, height: 16, display: 'inline-block' }}>
+                <Icon name="arrow" />
+              </span>
+            </button>
+          </div>
+        </div>
+        <div className="ftr__bottom">
+          <span className="ftr__cp">
+            © {year} {site.artistName} — All rights reserved
+          </span>
+          <button
+            className="totop"
+            type="button"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          >
+            Back to top
+            <span className="up" style={{ width: 14, height: 14, display: 'inline-block' }}>
+              <Icon name="arrowUp" />
+            </span>
+          </button>
+        </div>
       </div>
     </footer>
   )
