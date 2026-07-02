@@ -17,7 +17,7 @@
           canvas.width = size;
           canvas.height = size;
           const ctx = canvas.getContext('2d');
-          
+
           // Zoom in by 2x (crop to center 50% of image)
           const sourceSize = Math.min(img.width, img.height);
           const sourceX = (img.width - sourceSize) / 2;
@@ -26,10 +26,10 @@
           const scaledSize = sourceSize / zoomFactor;
           const scaledX = sourceX + (sourceSize - scaledSize) / 2;
           const scaledY = sourceY + (sourceSize - scaledSize) / 2;
-          
+
           // Draw zoomed/cropped image
           ctx.drawImage(img, scaledX, scaledY, scaledSize, scaledSize, 0, 0, size, size);
-          
+
           // Update favicon
           const favicon = document.querySelector("link[rel='icon']") || document.createElement('link');
           favicon.type = 'image/png';
@@ -42,24 +42,30 @@
         img.src = '/images/favicon-test.png';
       })();
     </script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Official landing page - Listen to music, connect on social media, and stay updated." />
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#07050a" />
+    <meta name="description" content="villxin — independent ambient-metalcore. Devotion that burns down to the root. Debut single coming 2026. Join the mailing list." />
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://villxin.com/" />
-    <meta property="og:title" content="Villxin - Official Landing Page" />
-    <meta property="og:description" content="Official landing page - Listen to music, connect on social media, and stay updated." />
+    <meta property="og:title" content="villxin — independent ambient-metalcore" />
+    <meta property="og:description" content="Devotion that burns down to the root. Debut single coming 2026." />
     <meta property="og:image" content="/images/og-image.jpg" />
-    
+
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://villxin.com/" />
-    <meta property="twitter:title" content="Villxin - Official Landing Page" />
-    <meta property="twitter:description" content="Official landing page - Listen to music, connect on social media, and stay updated." />
+    <meta property="twitter:title" content="villxin — independent ambient-metalcore" />
+    <meta property="twitter:description" content="Devotion that burns down to the root. Debut single coming 2026." />
     <meta property="twitter:image" content="/images/og-image.jpg" />
-    
-    <title>Villxin - Official Landing Page</title>
+
+    <!-- fonts: Cormorant Garamond (display + body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+
+    <title>villxin — independent ambient-metalcore</title>
   </head>
   <body>
     <div id="root"></div>
