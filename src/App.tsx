@@ -5,15 +5,19 @@ import SocialDock from './components/SocialDock'
 import MailingListModal from './components/MailingListModal'
 import HomePage from './pages/HomePage'
 import StorePage from './pages/StorePage'
+import YourAreaPage from './pages/YourAreaPage'
 import { ModalContext } from './context/ModalContext'
 import './styles/App.css'
 
 const ML_SEEN_KEY = 'villxin_ml_seen'
 
-/* Hash-based page switch ("#/store" -> store) — plain "#section" hashes
-   stay on home so in-page anchors keep working. */
+/* Hash-based page switch ("#/store" -> store, "#/yourarea..." -> yourarea) —
+   plain "#section" hashes stay on home so in-page anchors keep working. */
 function getPage(): Page {
-  return window.location.hash.startsWith('#/store') ? 'store' : 'home'
+  const hash = window.location.hash
+  if (hash.startsWith('#/store')) return 'store'
+  if (hash.startsWith('#/yourarea')) return 'yourarea'
+  return 'home'
 }
 
 function App() {
@@ -43,6 +47,8 @@ function App() {
       window.scrollTo(0, 0)
       return
     }
+    // yourarea lands itself (top of profile/inbox, or its signup strip)
+    if (page === 'yourarea') return
     const id = window.location.hash.slice(1)
     if (id && !id.startsWith('/')) {
       document.getElementById(id)?.scrollIntoView()
@@ -66,7 +72,7 @@ function App() {
   return (
     <ModalContext.Provider value={openModal}>
       <Header page={page} />
-      {page === 'store' ? <StorePage /> : <HomePage />}
+      {page === 'store' ? <StorePage /> : page === 'yourarea' ? <YourAreaPage /> : <HomePage />}
       <Footer />
 
       <SocialDock hidden={modalOpen} />

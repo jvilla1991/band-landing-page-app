@@ -34,6 +34,41 @@ export interface Product {
   image: string
 }
 
+export interface YourAreaBulletin {
+  date: string
+  title: string
+}
+
+export interface YourAreaComment {
+  user: string
+  date: string
+  /** Renders as animated gradient text when the "2005 jank" toggle is on. */
+  glitter: boolean
+  text: string
+}
+
+export interface YourAreaConfig {
+  name: string
+  tag: string
+  memberCount: number
+  onlineNow: number
+  profile: {
+    status: string
+    lastLogin: string
+    memberSince: string
+    hereFor: string
+    location: string
+    mood: string
+    /** Profile song — a real demo track played via <audio>. */
+    song: Track
+  }
+  blurb: { about: string; meet: string }
+  bulletins: YourAreaBulletin[]
+  top8: string[]
+  comments: YourAreaComment[]
+  commentCount: number
+}
+
 export interface SiteConfig {
   artistName: string
   tagline: string
@@ -75,6 +110,7 @@ export interface SiteConfig {
     shippingNote: string
     products: Product[]
   }
+  yourarea: YourAreaConfig
   seo: {
     title: string
     description: string
@@ -170,6 +206,45 @@ export const site: SiteConfig = {
       { id: 'ashfall-hoodie', type: 'Hoodie', name: 'Ashfall Hoodie', price: 52, sizes: ['S', 'M', 'L', 'XL', '2XL'], checkoutUrl: '', image: '' },
       { id: 'emblem-hoodie', type: 'Hoodie', name: 'Emblem Hoodie', price: 52, sizes: ['S', 'M', 'L', 'XL', '2XL'], checkoutUrl: '', image: '' },
     ],
+  },
+
+  /* YourArea community — static demo data (no backend yet); signup, DMs
+     and the inbox are local-state demos of the eventual flows */
+  yourarea: {
+    name: 'YourArea',
+    tag: 'a villxin space',
+    memberCount: 47,
+    onlineNow: 6,
+    profile: {
+      status: 'Online Now!',
+      lastLogin: 'Today',
+      memberSince: '2026.07',
+      hereFor: 'The quiet and the collapse',
+      location: 'The space between',
+      mood: 'smoldering',
+      song: { title: 'Moonlight', note: 'profile song · demo', src: '/audio/Moonlight (Demo).wav' },
+    },
+    blurb: {
+      about:
+        'This is the official villxin profile. Bulletins, demos and pre-release things land here first. Leave a comment, claim a corner, be kind to each other.',
+      meet: 'People who write lyrics in the margins of other things. People who stay after the last song.',
+    },
+    bulletins: [
+      { date: 'Jul 09 2026', title: 'Ashfall pre-save goes live next week' },
+      { date: 'Jul 02 2026', title: 'New demo on the Listen page — Tidewreck rough' },
+      { date: 'Jun 24 2026', title: 'YourArea is open. Claim your username.' },
+    ],
+    top8: [
+      'emberwitch', 'hollow.sun.kid', 'tidewrecked', 'grave.bloom',
+      'static.saint', 'vesperlight', 'rootburn', 'ashenveil',
+    ],
+    comments: [
+      { user: 'emberwitch', date: 'Jul 10 2026 · 11:42 PM', glitter: true, text: 'FIRST. thanks for the add!! ashfall demo has not left my head in a week' },
+      { user: 'tidewrecked', date: 'Jul 08 2026 · 1:14 AM', glitter: false, text: 'the outro of hollow sun sounds like drowning in the best way. posting this from the bathtub' },
+      { user: 'grave.bloom', date: 'Jul 05 2026 · 9:03 PM', glitter: true, text: '~*~ devotion that burns down to the root ~*~ putting this on my wall' },
+      { user: 'static.saint', date: 'Jun 30 2026 · 2:37 AM', glitter: false, text: 'who else is up. come talk about the tidewreck bridge in the boards' },
+    ],
+    commentCount: 27,
   },
 
   seo: {
