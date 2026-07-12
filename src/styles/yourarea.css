@@ -54,9 +54,16 @@
   color: var(--text-dim);
   border-right: 1px solid var(--line);
 }
-.ya__links a:last-child { border-right: 0; }
+.ya__links a:last-child, .ya__links button:last-child { border-right: 0; }
 .ya__links a:hover, .ya__links button:hover { color: var(--accent-bright); text-decoration: underline; }
 .ya__links .is-here { color: var(--accent-bright); }
+.ya__me {
+  font-size: 13.5px;
+  padding: 6px 10px;
+  border-right: 1px solid var(--line);
+  color: var(--accent-bright);
+  font-style: italic;
+}
 
 .ya__search {
   display: flex;
@@ -353,6 +360,39 @@
   background-size: 14px 14px;
 }
 
+/* wall comment composer (signed-in only) */
+.ya__wallform {
+  border-top: 1px solid var(--line);
+  padding: 12px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.ya__wallform input[type="text"] {
+  flex: 1;
+  min-width: 160px;
+  background: var(--bg);
+  border: 1px solid var(--line-2);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  padding: 11px 12px;
+  border-radius: 2px;
+}
+.ya__wallform input[type="text"]:focus { border-color: var(--accent-line); outline: none; }
+.ya__wallform .btn { min-height: 44px; padding: 10px 18px; font-size: 11px; }
+.ya__glitter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-style: italic;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+.ya__glitter input { accent-color: var(--accent); }
+
 /* ---------- signup strip ---------- */
 .ya__signup { border-top: 1px solid var(--line-2); background: var(--bg-1); padding-block: 42px 48px; }
 .ya__signup h2 {
@@ -379,6 +419,23 @@
 .ya__note.ok { color: var(--ok); }
 .ya__note.err { color: var(--err); }
 .ya__note.dim { color: var(--text-faint); }
+
+/* inline link-styled button (signup <-> login switch) */
+.ya__linkbtn {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: var(--text-dim);
+  text-decoration: underline;
+  text-decoration-color: var(--line-2);
+  cursor: pointer;
+}
+.ya__linkbtn:hover { color: var(--accent-bright); }
+
+/* magic-link landing ("#/yourarea/verify?token=…") */
+.ya__verify { padding-block: 26px 70px; min-height: 40vh; }
+.ya__verify .yabox { max-width: 560px; }
 
 /* ---------- inbox / mail center ---------- */
 .ya__page--inbox { grid-template-columns: 220px 1fr; min-height: 52vh; }
@@ -420,6 +477,21 @@
 .ya__mail .sub a { color: var(--text-dim); text-decoration: underline; text-decoration-color: var(--line-2); }
 .ya__mail .dt { width: 26%; color: var(--text-faint); font-style: italic; font-size: 12.5px; text-align: right; white-space: nowrap; }
 .ya__mail tr.unread .frm, .ya__mail tr.unread .sub a { font-weight: 700; color: var(--text); }
+
+/* non-clickable folders (sent / trash) */
+.ya__mail--static td { cursor: default; }
+.ya__mail--static tr:hover td { background: transparent; }
+.ya__rowact {
+  border: 0;
+  background: none;
+  padding: 0;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-style: italic;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+.ya__rowact:hover { color: var(--accent-bright); }
 
 /* requests */
 .ya__req { border-top: 1px solid var(--line); padding: 14px 12px; display: grid; grid-template-columns: 78px 1fr; gap: 12px; }
@@ -498,6 +570,16 @@
   color: var(--text-dim);
   margin: 12px 0;
 }
+/* real compose field (signed in) inherits the quoted-message look */
+textarea.yadm__msg {
+  display: block;
+  width: 100%;
+  min-height: 74px;
+  resize: vertical;
+  font-family: var(--font-body);
+  font-size: 14.5px;
+}
+textarea.yadm__msg:focus { border-color: var(--accent-line); outline: none; }
 .yadm__row { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
 .yadm__row .btn { min-height: 44px; padding: 10px 18px; font-size: 11px; }
 .yadm__hint { font-size: 12.5px; color: var(--text-faint); font-style: italic; margin-top: 12px; }

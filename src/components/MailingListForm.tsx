@@ -1,4 +1,5 @@
 import { useRef, useState, FormEvent } from 'react'
+import { API_BASE } from '../config/api'
 import Icon from './Icon'
 
 type Status = 'idle' | 'loading' | 'success' | 'duplicate' | 'error'
@@ -7,7 +8,7 @@ type Status = 'idle' | 'loading' | 'success' | 'duplicate' | 'error'
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 async function subscribeRequest(email: string): Promise<number> {
-  const res = await fetch(`${import.meta.env.VITE_API_URL ?? ''}/api/subscribe`, {
+  const res = await fetch(`${API_BASE}/api/subscribe`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email }),
