@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react'
 import { site } from '../config/site'
 import { useOpenModal } from '../context/ModalContext'
 
-export type Page = 'home' | 'store'
+export type Page = 'home' | 'store' | 'yourarea'
 
 const NAV: { label: string; href: string; page?: Page }[] = [
   { label: 'Home', href: '#top' },
   { label: 'Listen', href: '#listen' },
   { label: 'About', href: '#about' },
   { label: 'Store', href: '#/store', page: 'store' },
+  { label: 'YourArea', href: '#/yourarea', page: 'yourarea' },
   { label: 'Contact', href: '#contact' },
 ]
 
