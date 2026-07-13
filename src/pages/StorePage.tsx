@@ -23,6 +23,11 @@ function pickDefaultVariant(variants: ShopVariant[]): ShopVariant | undefined {
   return variants.find((v) => v.label.toUpperCase() === 'M') ?? variants[0]
 }
 
+/** "$28" for whole dollars, "$28.50" otherwise. */
+function fmtPrice(n: number): string {
+  return Number.isInteger(n) ? `$${n}` : `$${n.toFixed(2)}`
+}
+
 function ProductCard({ product }: { product: ShopProduct }) {
   const hasVariants = product.variants.length > 0
   const [variantId, setVariantId] = useState<number | undefined>(() => pickDefaultVariant(product.variants)?.id)
@@ -65,7 +70,7 @@ function ProductCard({ product }: { product: ShopProduct }) {
         <span className="prod__type">{type}</span>
         <div className="prod__row">
           <h3 className="prod__name">{product.name}</h3>
-          <span className="prod__price">${product.price}</span>
+          <span className="prod__price">{fmtPrice(selected?.price ?? product.price)}</span>
         </div>
         {hasVariants && (
           <div className="prod__sizes" role="group" aria-label={`${product.name} size`}>
@@ -89,7 +94,7 @@ function ProductCard({ product }: { product: ShopProduct }) {
               disabled={buying || !selected}
               onClick={() => void buy()}
             >
-              {buying ? 'Redirecting…' : `Buy — $${product.price}`}
+              {buying ? 'Redirecting…' : `Buy — ${fmtPrice(selected?.price ?? product.price)}`}
               {!buying && (
                 <span className="arr" style={{ width: 16, height: 16, display: 'inline-block' }}>
                   <Icon name="arrow" />
