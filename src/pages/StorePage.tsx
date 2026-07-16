@@ -18,9 +18,11 @@ function fallbackProducts(): ShopProduct[] {
   }))
 }
 
-/** Default-select "M" when present, else the first variant, else none. */
-function pickDefaultVariant(variants: ShopVariant[]): ShopVariant | undefined {
-  return variants.find((v) => v.label.toUpperCase() === 'M') ?? variants[0]
+/** First occurrence order, empties dropped — variants arrive pre-sorted by the API. */
+function uniqueInOrder(values: (string | null | undefined)[]): string[] {
+  const out: string[] = []
+  for (const v of values) if (v && !out.includes(v)) out.push(v)
+  return out
 }
 
 /** "$28" for whole dollars, "$28.50" otherwise. */
@@ -28,14 +30,43 @@ function fmtPrice(n: number): string {
   return Number.isInteger(n) ? `$${n}` : `$${n.toFixed(2)}`
 }
 
+function deriveType(name: string): string {
+  const n = name.toLowerCase()
+  if (n.includes('hoodie')) return 'Hoodie'
+  if (n.includes('tank')) return 'Tank'
+  if (n.includes('sticker')) return 'Sticker'
+  if (n.includes('keyring') || n.includes('keychain')) return 'Keychain'
+  if (n.includes('v-neck') || n.includes('tee') || n.includes('shirt')) return 'Tee'
+  return 'Merch'
+}
+
 function ProductCard({ product }: { product: ShopProduct }) {
   const hasVariants = product.variants.length > 0
-  const [variantId, setVariantId] = useState<number | undefined>(() => pickDefaultVariant(product.variants)?.id)
+  const sizes = uniqueInOrder(product.variants.map((v) => v.size))
+  const colors = uniqueInOrder(product.variants.map((v) => v.color))
+  /* No structured dimensions at all (older sync data) -> pick by full label. */
+  const useLabels = sizes.length === 0 && colors.length === 0
+  const sizeOptions = useLabels ? uniqueInOrder(product.variants.map((v) => v.label)) : sizes
+
+  const [size, setSize] = useState<string | undefined>(() =>
+    sizeOptions.includes('M') ? 'M' : sizeOptions[0],
+  )
+  const [color, setColor] = useState<string | undefined>(colors[0])
   const [buying, setBuying] = useState(false)
   const [buyErr, setBuyErr] = useState<string | null>(null)
 
-  const selected = product.variants.find((v) => v.id === variantId)
-  const type = /hoodie/i.test(product.name) ? 'Hoodie' : 'Tee'
+  const bySize = (v: ShopVariant) =>
+    useLabels ? v.label === size : sizes.length === 0 || v.size === size
+  const selected =
+    product.variants.find((v) => bySize(v) && (colors.length === 0 || v.color === color)) ??
+    product.variants.find(bySize) ??
+    product.variants[0]
+  /* Colors that exist for the chosen size; others render disabled. */
+  const availableColors = new Set(product.variants.filter(bySize).map((v) => v.color))
+
+  /* Printify titles carry SEO suffixes ("… | Indoor Outdoor") — show the part before the pipe. */
+  const displayName = product.name.split('|')[0].trim()
+  const type = deriveType(displayName)
 
   async function buy() {
     if (!selected || buying) return
@@ -54,13 +85,13 @@ function ProductCard({ product }: { product: ShopProduct }) {
     <article className="prod">
       <div className="prod__art">
         {product.imageUrl ? (
-          <img src={product.imageUrl} alt={product.name} />
+          <img src={product.imageUrl} alt={displayName} />
         ) : (
           <div className="ph">
             <div style={{ width: 30, height: 30 }}>
               <Icon name="image" />
             </div>
-            {product.name}
+            {displayName}
             <br />
             art coming soon
           </div>
@@ -69,21 +100,42 @@ function ProductCard({ product }: { product: ShopProduct }) {
       <div className="prod__body">
         <span className="prod__type">{type}</span>
         <div className="prod__row">
-          <h3 className="prod__name">{product.name}</h3>
+          <h3 className="prod__name">{displayName}</h3>
           <span className="prod__price">{fmtPrice(selected?.price ?? product.price)}</span>
         </div>
-        {hasVariants && (
-          <div className="prod__sizes" role="group" aria-label={`${product.name} size`}>
-            {product.variants.map((v) => (
-              <button
-                key={v.id}
-                type="button"
-                className={'szp' + (variantId === v.id ? ' sel' : '')}
-                onClick={() => setVariantId(v.id)}
-              >
-                {v.label}
-              </button>
-            ))}
+        {sizeOptions.length > 1 && (
+          <div className="prod__opt">
+            <span className="prod__dim">Size</span>
+            <div className="prod__sizes" role="group" aria-label={`${displayName} size`}>
+              {sizeOptions.map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  className={'szp' + (size === s ? ' sel' : '')}
+                  onClick={() => setSize(s)}
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        {colors.length > 1 && (
+          <div className="prod__opt">
+            <span className="prod__dim">Color</span>
+            <div className="prod__sizes" role="group" aria-label={`${displayName} color`}>
+              {colors.map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  className={'szp' + (selected?.color === c ? ' sel' : '')}
+                  disabled={!availableColors.has(c)}
+                  onClick={() => setColor(c)}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
           </div>
         )}
         <div className="prod__buy">

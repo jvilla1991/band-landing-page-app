@@ -5,6 +5,10 @@ import { fetchJson } from './api'
 export interface ShopVariant {
   id: number
   label: string
+  /** Structured size option from Printify (e.g. "M"); null when the product has no size dimension. */
+  size?: string | null
+  /** Structured color option from Printify (e.g. "Solid Black"); null when no color dimension. */
+  color?: string | null
   price: number
 }
 

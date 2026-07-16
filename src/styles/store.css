@@ -43,6 +43,11 @@
 .prod__name { font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: 1.16rem; letter-spacing: -0.01em; margin: 0; }
 .prod__price { font-family: var(--font-mono); font-size: 1rem; color: var(--text); white-space: nowrap; }
 
+.prod__opt { display: flex; flex-direction: column; gap: 5px; }
+.prod__dim {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--text-faint);
+}
 .prod__sizes { display: flex; gap: 6px; flex-wrap: wrap; }
 .szp {
   min-width: 40px; height: 34px; padding-inline: 8px; border-radius: 100px;
@@ -52,6 +57,8 @@
 }
 .szp:hover { border-color: var(--accent-line); color: var(--text); }
 .szp.sel { border-color: var(--accent-bright); color: var(--accent-bright); background: var(--accent-soft); }
+.szp:disabled { opacity: 0.35; cursor: default; }
+.szp:disabled:hover { border-color: var(--line-2); color: var(--text-dim); }
 
 .prod__buy { margin-top: auto; padding-top: 6px; }
 .prod__buy .btn { width: 100%; justify-content: center; }
