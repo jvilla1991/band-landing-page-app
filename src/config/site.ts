@@ -28,8 +28,6 @@ export interface Product {
   name: string
   price: number
   sizes: string[]
-  /** Stripe Payment Link. Empty string renders as "Checkout soon". */
-  checkoutUrl: string
   /** Product art path. Empty string renders a placeholder frame. */
   image: string
 }
@@ -198,13 +196,17 @@ export const site: SiteConfig = {
 
   store: {
     fulfillment: 'Printed on demand by Printify · Secure checkout by Stripe',
-    shippingNote: 'Ships worldwide · 7–10 days production + transit',
+    shippingNote: 'Ships in the US · 7–10 days production + transit',
+    /* Static API-down fallback only. Live product data (real Printify art,
+       variant IDs/prices) comes from GET /api/shop/products — see
+       src/config/shop.ts and StorePage's fetch effect. These render with
+       variants: [] so their cards fall back to "Checkout soon". */
     products: [
-      { id: 'ashfall-tee', type: 'Tee', name: 'Ashfall Tee', price: 28, sizes: ['S', 'M', 'L', 'XL', '2XL'], checkoutUrl: '', image: '' },
-      { id: 'emblem-tee', type: 'Tee', name: 'Emblem Tee', price: 28, sizes: ['S', 'M', 'L', 'XL', '2XL'], checkoutUrl: '', image: '' },
-      { id: 'hollow-sun-tee', type: 'Tee', name: 'Hollow Sun Tee', price: 28, sizes: ['S', 'M', 'L', 'XL', '2XL'], checkoutUrl: '', image: '' },
-      { id: 'ashfall-hoodie', type: 'Hoodie', name: 'Ashfall Hoodie', price: 52, sizes: ['S', 'M', 'L', 'XL', '2XL'], checkoutUrl: '', image: '' },
-      { id: 'emblem-hoodie', type: 'Hoodie', name: 'Emblem Hoodie', price: 52, sizes: ['S', 'M', 'L', 'XL', '2XL'], checkoutUrl: '', image: '' },
+      { id: 'ashfall-tee', type: 'Tee', name: 'Ashfall Tee', price: 28, sizes: ['S', 'M', 'L', 'XL', '2XL'], image: '' },
+      { id: 'emblem-tee', type: 'Tee', name: 'Emblem Tee', price: 28, sizes: ['S', 'M', 'L', 'XL', '2XL'], image: '' },
+      { id: 'hollow-sun-tee', type: 'Tee', name: 'Hollow Sun Tee', price: 28, sizes: ['S', 'M', 'L', 'XL', '2XL'], image: '' },
+      { id: 'ashfall-hoodie', type: 'Hoodie', name: 'Ashfall Hoodie', price: 52, sizes: ['S', 'M', 'L', 'XL', '2XL'], image: '' },
+      { id: 'emblem-hoodie', type: 'Hoodie', name: 'Emblem Hoodie', price: 52, sizes: ['S', 'M', 'L', 'XL', '2XL'], image: '' },
     ],
   },
 
