@@ -1,5 +1,5 @@
 /* ============================================================
-   villxin — store page styles (extends index.css + App.css)
+   villxin — store page styles (extends styles.css + sections.css)
    ============================================================ */
 
 /* ---- store hero (short; no emblem parallax) ---- */
@@ -26,16 +26,8 @@
 }
 .prod:hover { border-color: var(--accent-line); transform: translateY(-3px); box-shadow: 0 18px 50px -26px rgba(217,64,42,0.55); }
 
-.prod__art {
-  position: relative; aspect-ratio: 4 / 5; background: var(--bg-2);
-  display: grid; place-items: center;
-}
-.prod__art img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.prod__art .ph {
-  text-align: center; color: var(--text-faint); font-family: var(--font-mono);
-  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; line-height: 1.8; padding: 20px;
-}
-.prod__art .ph svg { margin: 0 auto 12px; opacity: 0.5; width: 30px; height: 30px; }
+.prod__art { position: relative; aspect-ratio: 4 / 5; background: var(--bg-2); }
+.prod__art image-slot { position: absolute; inset: 0; width: 100%; height: 100%; }
 
 .prod__body { padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
 .prod__type { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent-bright); }
@@ -43,11 +35,6 @@
 .prod__name { font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: 1.16rem; letter-spacing: -0.01em; margin: 0; }
 .prod__price { font-family: var(--font-mono); font-size: 1rem; color: var(--text); white-space: nowrap; }
 
-.prod__opt { display: flex; flex-direction: column; gap: 5px; }
-.prod__dim {
-  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.28em;
-  text-transform: uppercase; color: var(--text-faint);
-}
 .prod__sizes { display: flex; gap: 6px; flex-wrap: wrap; }
 .szp {
   min-width: 40px; height: 34px; padding-inline: 8px; border-radius: 100px;
@@ -57,8 +44,6 @@
 }
 .szp:hover { border-color: var(--accent-line); color: var(--text); }
 .szp.sel { border-color: var(--accent-bright); color: var(--accent-bright); background: var(--accent-soft); }
-.szp:disabled { opacity: 0.35; cursor: default; }
-.szp:disabled:hover { border-color: var(--line-2); color: var(--text-dim); }
 
 .prod__buy { margin-top: auto; padding-top: 6px; }
 .prod__buy .btn { width: 100%; justify-content: center; }
@@ -69,50 +54,6 @@
   color: var(--text-faint); cursor: default;
 }
 .prod__soon i { width: 5px; height: 5px; border-radius: 50%; background: var(--text-faint); font-style: normal; }
-.prod__err { margin: 2px 0 0; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.02em; color: var(--err); }
-
-/* ---- loading skeleton (product fetch in flight) ---- */
-.prod--skeleton .prod__art { background: var(--bg-2); }
-.sk {
-  border-radius: 100px; background: var(--surface-2);
-  animation: skpulse 1.4s var(--ease) infinite;
-}
-.sk--type { width: 40%; height: 9px; }
-.sk--name { width: 70%; height: 18px; border-radius: 4px; }
-.sk--sizes { width: 100%; height: 34px; border-radius: var(--radius); }
-.sk--buy { width: 100%; height: 50px; border-radius: var(--radius); margin-top: auto; }
-@keyframes skpulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 0.9; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .sk { animation: none; }
-}
-
-/* ---- checkout success panel ---- */
-.storeok {
-  display: flex; align-items: flex-start; gap: 18px;
-  border: 1px solid var(--accent-line); border-radius: var(--radius-lg);
-  background: var(--accent-soft); padding: 22px 26px; margin: 30px 0 0;
-}
-.storeok__badge {
-  flex: none; width: 34px; height: 34px; border-radius: 50%;
-  display: grid; place-items: center; color: var(--accent-bright);
-  border: 1px solid var(--accent-line); background: var(--bg-1);
-}
-.storeok__badge svg { width: 18px; height: 18px; }
-.storeok__title {
-  font-family: var(--font-display); font-weight: 800; text-transform: uppercase;
-  font-size: 1.3rem; letter-spacing: -0.01em; margin: 2px 0 8px;
-}
-.storeok__body { color: var(--text-dim); line-height: 1.65; max-width: 60ch; margin: 0 0 12px; }
-.storeok__back {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--accent-bright); text-decoration: none;
-}
-.storeok__back svg { width: 14px; height: 14px; transform: rotate(-90deg); }
-.storeok__back:hover { color: var(--text); }
 
 /* ---- fulfillment strip ---- */
 .fulfil {
