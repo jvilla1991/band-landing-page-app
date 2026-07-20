@@ -9,6 +9,9 @@ export type PlatformId =
   | 'facebook'
   | 'discord'
   | 'tidal'
+  | 'amazon'
+  | 'soundcloud'
+  | 'deezer'
 
 export interface LinkItem {
   id: PlatformId
@@ -151,7 +154,10 @@ export const site: SiteConfig = {
   streaming: [
     { id: 'spotify', label: 'Spotify', href: '' },
     { id: 'apple', label: 'Apple Music', href: '' },
+    { id: 'amazon', label: 'Amazon Music', href: '' },
     { id: 'tidal', label: 'Tidal', href: '' },
+    { id: 'deezer', label: 'Deezer', href: '' },
+    { id: 'soundcloud', label: 'SoundCloud', href: '' },
     { id: 'bandcamp', label: 'Bandcamp', href: '' },
     { id: 'youtube', label: 'YouTube', href: '' },
   ],
