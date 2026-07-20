@@ -15,7 +15,6 @@ function Footer() {
             <span className="nm">{site.artistName}</span>
           </div>
           <div className="ftr__join">
-            <span className="ftr__join-tx">Be first to hear the debut.</span>
             <button className="btn btn--primary" type="button" onClick={openModal}>
               Join the mailing list
               <span className="arr" style={{ width: 16, height: 16, display: 'inline-block' }}>

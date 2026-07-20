@@ -48,12 +48,9 @@ function AboutEPK() {
                 <h4>{site.pressKit.label}</h4>
                 <p>{site.pressKit.note}</p>
               </div>
-              <a className="btn" href={site.pressKit.href} aria-label="Download press kit">
-                Download
-                <span className="arr" style={{ width: 16, height: 16, display: 'inline-block' }}>
-                  <Icon name="download" />
-                </span>
-              </a>
+              <button className="btn" type="button" disabled aria-label="Press kit coming soon">
+                Coming soon
+              </button>
             </div>
           </div>
         </div>
