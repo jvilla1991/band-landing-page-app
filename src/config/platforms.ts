@@ -3,6 +3,7 @@ import type { IconName } from '../components/Icon'
 export const PLATFORM: Record<string, { label: string; icon: IconName }> = {
   spotify: { label: 'Spotify', icon: 'spotify' },
   apple: { label: 'Apple Music', icon: 'apple' },
+  tidal: { label: 'Tidal', icon: 'tidal' },
   bandcamp: { label: 'Bandcamp', icon: 'bandcamp' },
   youtube: { label: 'YouTube', icon: 'youtube' },
   instagram: { label: 'Instagram', icon: 'instagram' },

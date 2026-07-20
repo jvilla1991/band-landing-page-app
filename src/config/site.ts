@@ -8,6 +8,7 @@ export type PlatformId =
   | 'tiktok'
   | 'facebook'
   | 'discord'
+  | 'tidal'
 
 export interface LinkItem {
   id: PlatformId
@@ -84,7 +85,8 @@ export interface SiteConfig {
     status: 'coming-soon' | 'out'
     releaseDate: string
     releaseDateLabel: string
-    primaryCta: { label: string; href: string }
+    /** disabled -> rendered as a non-clickable button (e.g. pre-save not open yet). */
+    primaryCta: { label: string; href: string; disabled?: boolean }
   }
   tracks: Track[]
   streaming: LinkItem[]
@@ -125,30 +127,31 @@ export const site: SiteConfig = {
     iconMark: '/images/villxin-logo.png',
     emblem: '/images/villxin-logo.png',
     wordmark: '/images/villxin-title-2.png',
-    coverArt: '', // empty -> placeholder frame
+    coverArt: '/images/moonlight-cover.jpg',
     pressPhoto: '', // empty -> placeholder frame
     ogImage: '/images/og-image.jpg',
   },
 
   latestRelease: {
     type: 'Debut Single',
-    title: 'Ashfall',
+    title: 'Moonlight',
     status: 'coming-soon',
-    releaseDate: '2026.09.04',
-    releaseDateLabel: 'Sep 4, 2026',
-    primaryCta: { label: 'Pre-save', href: '#' },
+    releaseDate: '2026.08.14',
+    releaseDateLabel: 'Aug 14, 2026',
+    primaryCta: { label: 'Pre-save', href: '#', disabled: true },
   },
 
   tracks: [
-    { title: 'Moonlight', note: 'Demo · coming soon', src: '/audio/Moonlight (Demo).wav' },
-    { title: 'Freed From Chains', note: 'Demo preview', src: '/audio/Freed From Chains (Demo).wav' },
-    { title: 'Up In Smoke', note: 'Demo preview', src: '/audio/Up In Smoke (Demo).wav' },
+    { title: 'Moonlight', note: 'Demo · out Aug 14, 2026', src: '/audio/Moonlight (Demo).wav' },
+    { title: 'Freed From Chains', note: 'Demo · mid September', src: '/audio/Freed From Chains (Demo).wav' },
+    { title: 'Up In Smoke', note: 'Demo · coming soon', src: '/audio/Up In Smoke (Demo).wav' },
   ],
 
   /* href empty -> renders as "coming soon" / disabled */
   streaming: [
     { id: 'spotify', label: 'Spotify', href: '' },
     { id: 'apple', label: 'Apple Music', href: '' },
+    { id: 'tidal', label: 'Tidal', href: '' },
     { id: 'bandcamp', label: 'Bandcamp', href: '' },
     { id: 'youtube', label: 'YouTube', href: '' },
   ],

@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 export type IconName =
   | 'spotify'
   | 'apple'
+  | 'tidal'
   | 'bandcamp'
   | 'youtube'
   | 'instagram'
@@ -60,6 +61,14 @@ const ICONS: Record<IconName, JSX.Element> = {
       <path d="M16 7c0 5-3 6-3 10" />
       <circle cx={9.5} cy={16.5} r={2.4} />
       <path d="M11.9 16.2V7.3c0-0.5 0.3-0.9 0.8-1L16 5.4" />
+    </Svg>
+  ),
+  tidal: (
+    <Svg>
+      <path d="M3.2 9.7 6 6.9l2.8 2.8L6 12.5z" />
+      <path d="M8.8 9.7 11.6 6.9l2.8 2.8-2.8 2.8z" />
+      <path d="M14.4 9.7 17.2 6.9 20 9.7l-2.8 2.8z" />
+      <path d="M8.8 15.3 11.6 12.5l2.8 2.8-2.8 2.8z" />
     </Svg>
   ),
   bandcamp: (
