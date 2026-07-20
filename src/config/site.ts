@@ -131,7 +131,7 @@ export const site: SiteConfig = {
     emblem: '/images/villxin_heart_transparent_cropped.png',
     wordmark: '/images/title-white-cropped.png',
     coverArt: '/images/moonlight-cover.jpg',
-    pressPhoto: '/images/villxin_nashville_no_kendrix.png',
+    pressPhoto: '/images/villxin-press-cropped.png',
     ogImage: '/images/og-image.jpg',
   },
 
@@ -165,7 +165,7 @@ export const site: SiteConfig = {
   social: [
     { id: 'instagram', label: 'Instagram', href: 'https://www.instagram.com/villxin_music/' },
     { id: 'x', label: 'X', href: 'https://x.com/villxin_music' },
-    { id: 'youtube', label: 'YouTube', href: 'https://www.youtube.com/@villxin-music' },
+    { id: 'youtube', label: 'YouTube', href: 'https://www.youtube.com/@villxin-music/shorts' },
     { id: 'tiktok', label: 'TikTok', href: 'https://www.tiktok.com/@villxin_music' },
     { id: 'facebook', label: 'Facebook', href: 'https://www.facebook.com/villxin.music' },
     { id: 'discord', label: 'Discord', href: 'https://discord.gg/DVtjsUPrJQ' },
