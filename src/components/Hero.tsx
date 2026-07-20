@@ -35,9 +35,6 @@ function Hero() {
       <div className="fog" aria-hidden="true" />
       <div className="hero__bloom" aria-hidden="true" />
       <div className="wrap hero__inner" ref={innerRef}>
-        <div className="hero__emblem" ref={emblemRef}>
-          <img src={site.assets.emblem} alt={`${site.artistName} emblem`} />
-        </div>
         <div className="hero__kicker">
           <span className="eyebrow">Ambient · Metalcore</span>
         </div>
@@ -48,6 +45,9 @@ function Hero() {
             <span className="hero__wordmark--text">{site.artistName}</span>
           )}
         </h1>
+        <div className="hero__emblem" ref={emblemRef}>
+          <img src={site.assets.emblem} alt={`${site.artistName} emblem`} />
+        </div>
       </div>
     </section>
   )

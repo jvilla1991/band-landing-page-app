@@ -96,12 +96,12 @@
 /* ============================================================
    HERO — centered emblem + wordmark
    ============================================================ */
-.hero { position: relative; min-height: 100svh; display: flex; align-items: center; overflow: hidden; padding: 110px 0 80px; text-align: center; }
+.hero { position: relative; min-height: 100svh; display: flex; align-items: center; overflow: hidden; padding: 80px 0 52px; text-align: center; }
 .hero__inner { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; }
 
 /* big bloom behind emblem */
 .hero__bloom {
-  position: absolute; z-index: 1; top: 24%; left: 50%; width: min(820px, 120vw); aspect-ratio: 1;
+  position: absolute; z-index: 1; top: 52%; left: 50%; width: min(820px, 120vw); aspect-ratio: 1;
   transform: translate(-50%, -50%); pointer-events: none;
   background:
     radial-gradient(closest-side, rgba(217,64,42,0.22), rgba(217,64,42,0.06) 45%, transparent 70%),
@@ -112,7 +112,7 @@
 @keyframes pulse { 0%,100% { opacity: 0.75; transform: translate(-50%,-50%) scale(1); } 50% { opacity: 1; transform: translate(-50%,-50%) scale(1.06); } }
 @media (prefers-reduced-motion: reduce) { .hero__bloom { animation: none; } }
 
-.hero__emblem { width: clamp(220px, 42vw, 480px); aspect-ratio: 1; position: relative; }
+.hero__emblem { width: clamp(220px, 42vw, 480px); aspect-ratio: 1; position: relative; margin-top: 18px; }
 .hero__emblem img {
   width: 100%; height: 100%; object-fit: contain;
   filter: drop-shadow(0 0 40px rgba(255,90,50,0.35));
@@ -125,11 +125,11 @@
 }
 @media (prefers-reduced-motion: reduce) { .hero__emblem img { animation: none; } }
 
-.hero__kicker { margin-top: 26px; }
+.hero__kicker { margin-top: 0; }
 
-/* wordmark image */
-.hero__wordmark { margin: 22px 0 0; line-height: 0; }
-.hero__wordmark img { width: min(440px, 74vw); filter: drop-shadow(0 0 18px rgba(255,255,255,0.25)); }
+/* wordmark image — sits above the emblem, dominant */
+.hero__wordmark { margin: 10px 0 0; line-height: 0; }
+.hero__wordmark img { width: min(760px, 90vw); filter: drop-shadow(0 0 18px rgba(255,255,255,0.25)); }
 .hero__wordmark--text {
   font-family: var(--font-display); font-weight: 800; text-transform: uppercase;
   font-size: clamp(3rem, 15vw, 8rem); letter-spacing: 0.04em; color: var(--text); margin: 22px 0 0;
