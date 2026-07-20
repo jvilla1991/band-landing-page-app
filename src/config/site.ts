@@ -141,7 +141,7 @@ export const site: SiteConfig = {
     status: 'coming-soon',
     releaseDate: '2026.08.14',
     releaseDateLabel: 'Aug 14, 2026',
-    primaryCta: { label: 'Pre-save', href: '#', disabled: true },
+    primaryCta: { label: 'Coming soon', href: '#', disabled: true },
   },
 
   tracks: [
