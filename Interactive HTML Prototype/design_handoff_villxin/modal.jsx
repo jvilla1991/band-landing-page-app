@@ -33,10 +33,9 @@
         <div className="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
           <button className="modal__close" onClick={onClose} aria-label="Close" />
           <div className="modal__emblem"><img src={site.assets.emblem} alt="" /></div>
-          <div className="modal__eyebrow">Before you go in</div>
-          <h2 className="modal__title" id="modal-title">First to hear it</h2>
+          <h2 className="modal__title" id="modal-title">Be the first to know</h2>
           <p className="modal__lead">
-            villxin's debut is coming. One email when it lands — the release, the moment it's out. No noise, ever.
+            Our Debut is coming. We want you to have it before anyone else
           </p>
 
           <div ref={inputWrapRef}>
@@ -45,10 +44,10 @@
           </div>
 
           <p className="demohint">
-            Prototype demo · <code>you@email.com</code> success · <code>dupe@x.com</code> already in · <code>fail@x.com</code> error
+            Prototype demo · <code>your@email.com</code> success · <code>dupe@x.com</code> already in · <code>fail@x.com</code> error
           </p>
 
-          <div className="modal__later"><button type="button" onClick={onClose}>No thanks — take me in</button></div>
+          <div className="modal__later"><button type="button" onClick={onClose}>Maybe Later, let's check out the site</button></div>
         </div>
       </div>
     );

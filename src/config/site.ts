@@ -141,7 +141,7 @@ export const site: SiteConfig = {
     status: 'coming-soon',
     releaseDate: '2026.08.14',
     releaseDateLabel: 'Aug 14, 2026',
-    primaryCta: { label: 'Coming soon', href: '#', disabled: true },
+    primaryCta: { label: 'Pre-Save (Coming soon)', href: '#', disabled: true },
   },
 
   tracks: [
@@ -174,14 +174,14 @@ export const site: SiteConfig = {
     genre: 'Independent ambient-metalcore',
     lead: 'VILLXIN is the embraced duality of being human.',
     body: [
-      'Driven by a percussive low end, but without sacrificing the crispness that guitar brings to metal, villxin sits where ambient texture meets the weight of metal andmetalcore. Tracks open like scenes from a dark romance movie gone right.',
+      'Driven by a percussive low end, but without sacrificing the crispness that guitar brings to metal, villxin sits where ambient texture meets the weight of metal and metalcore. Tracks open like scenes from a dark romance movie gone right.',
       'The roots of Villxin trace back as early as 2019. Now, highly collaborative and unsigned, the project is releasing its first body of work in 2026.',
     ],
   },
 
   press: [
-    { quote: 'Glacial, immense, and quietly devastating.', source: 'Pull-quote slot — add press here' },
-    { quote: 'Ambient music with teeth.', source: 'Pull-quote slot — add press here' },
+    { quote: 'something something Darkside.', source: 'Emporer Palpatine' },
+    { quote: 'They always win sometimes.', source: 'Jesus H. Christ' },
   ],
 
   pressKit: {

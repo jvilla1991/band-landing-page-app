@@ -114,7 +114,6 @@
           <h1 className="hero__wordmark">
             {wm ? <img src={wm} alt={site.artistName} /> : <span className="hero__wordmark--text">villxin</span>}
           </h1>
-          <p className="hero__tag">{site.tagline}</p>
 
           <div className="hero__teaser">
             <span>{rel.type}</span><span className="sep" />
