@@ -96,7 +96,7 @@
 /* ============================================================
    HERO — centered emblem + wordmark
    ============================================================ */
-.hero { position: relative; min-height: 100svh; display: flex; align-items: center; overflow: hidden; padding: 96px 0 72px; text-align: center; }
+.hero { position: relative; min-height: 100svh; display: flex; align-items: center; overflow: hidden; padding: 80px 0 72px; text-align: center; }
 .hero__inner { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; }
 
 /* big bloom behind emblem */
@@ -235,7 +235,9 @@
 .links-head h3 { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--text-dim); margin: 0; font-weight: 400; }
 
 .lgrid { display: grid; gap: 12px; }
-.lgrid--stream { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+/* Even column count only (never an orphan odd tile): 2 up on small, 4 up (2 rows of 4) once there's room. */
+.lgrid--stream { grid-template-columns: repeat(2, 1fr); }
+@media (min-width: 700px) { .lgrid--stream { grid-template-columns: repeat(4, 1fr); } }
 .lgrid--social { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
 
 .lnk {
@@ -371,7 +373,7 @@
    CONTACT
    ============================================================ */
 .contact__grid { display: grid; gap: 16px; margin-top: 46px; }
-@media (min-width: 720px) { .contact__grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 720px) { .contact__grid { grid-template-columns: minmax(0, 520px); } }
 .ccard {
   border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg-1);
   padding: clamp(26px, 4vw, 40px); display: flex; flex-direction: column; gap: 16px;

@@ -131,7 +131,7 @@ export const site: SiteConfig = {
     emblem: '/images/villxin_heart_transparent_cropped.png',
     wordmark: '/images/title-white-cropped.png',
     coverArt: '/images/moonlight-cover.jpg',
-    pressPhoto: '', // empty -> placeholder frame
+    pressPhoto: '/images/villxin_nashville_no_kendrix.png',
     ogImage: '/images/og-image.jpg',
   },
 
@@ -192,8 +192,8 @@ export const site: SiteConfig = {
   },
 
   contact: {
-    bookingEmail: 'booking@villxin.com',
-    bookingNote: 'Booking, press, sync & collaboration',
+    bookingEmail: 'management@villxin.com',
+    bookingNote: '',
     generalEmail: 'hello@villxin.com',
     generalNote: 'Everything else',
     dms: [
