@@ -168,15 +168,14 @@ export const site: SiteConfig = {
     { id: 'youtube', label: 'YouTube', href: 'https://www.youtube.com/@villxin-music/shorts' },
     { id: 'tiktok', label: 'TikTok', href: 'https://www.tiktok.com/@villxin_music' },
     { id: 'facebook', label: 'Facebook', href: 'https://www.facebook.com/villxin.music' },
-    { id: 'discord', label: 'Discord', href: 'https://discord.gg/DVtjsUPrJQ' },
   ],
 
   about: {
     genre: 'Independent ambient-metalcore',
-    lead: 'villxin is the solo project of a writer chasing the space between stillness and collapse.',
+    lead: 'VILLXIN is the embraced duality of being human.',
     body: [
-      'Built from layered guitar drones, field recordings and slow-burning percussion, villxin sits where ambient texture meets the weight of metalcore. Tracks open in near-silence and end underwater.',
-      'Self-produced and unsigned, the project is releasing its first body of work in 2026 — a study in restraint and rupture.',
+      'Driven by a percussive low end, but without sacrificing the crispness that guitar brings to metal, villxin sits where ambient texture meets the weight of metal andmetalcore. Tracks open like scenes from a dark romance movie gone right.',
+      'The roots of Villxin trace back as early as 2019. Now, highly collaborative and unsigned, the project is releasing its first body of work in 2026.',
     ],
   },
 

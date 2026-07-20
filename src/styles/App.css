@@ -439,10 +439,10 @@
 }
 .socialdock.in { opacity: 1; transform: translateX(-50%) translateY(0); }
 .socialdock.away { opacity: 0; transform: translateX(-50%) translateY(140%); pointer-events: none; }
-.socialdock__label { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase; color: #ffffff; white-space: nowrap; }
+.socialdock__label { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.28em; text-transform: uppercase; color: #ffffff; white-space: nowrap; }
 .socialdock__row { display: flex; gap: 4px; }
-.sdk { width: 62px; height: 62px; border-radius: 50%; display: grid; place-items: center; color: #ffffff; transition: color .35s var(--ease), background .35s var(--ease); position: relative; }
-.socialdock__ic { width: 30px; height: 30px; display: block; }
+.sdk { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; color: #ffffff; transition: color .35s var(--ease), background .35s var(--ease); position: relative; }
+.socialdock__ic { width: 34px; height: 34px; display: block; }
 .sdk.live:hover { color: var(--accent-bright); background: var(--accent-soft); }
 .sdk.soon { color: #ffffff; opacity: 0.78; cursor: default; }
 .sdk.soon::after { content: ""; position: absolute; right: 11px; bottom: 12px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); opacity: 0.7; }
@@ -452,7 +452,7 @@
   .socialdock.in { transform: translateY(0); }
   .socialdock.away { transform: translateY(140%); }
   .socialdock__label { display: none; }
-  .socialdock__row { gap: 3px; }
-  .sdk { width: 54px; height: 54px; }
-  .socialdock__ic { width: 28px; height: 28px; }
+  .socialdock__row { gap: 4px; }
+  .sdk { width: 62px; height: 62px; }
+  .socialdock__ic { width: 32px; height: 32px; }
 }
