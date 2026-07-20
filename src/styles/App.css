@@ -429,9 +429,9 @@
    PERSISTENT SOCIAL DOCK (fixed; follows scroll)
    ============================================================ */
 .socialdock {
-  position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%) translateY(140%);
-  z-index: 900; display: flex; align-items: center; gap: 18px;
-  padding: 10px 12px 10px 24px; border-radius: 100px;
+  position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%) translateY(140%);
+  z-index: 900; display: flex; align-items: center; gap: 20px;
+  padding: 12px 14px 12px 28px; border-radius: 100px;
   background: rgba(20,12,28,0.92); backdrop-filter: blur(16px) saturate(1.1);
   border: 1px solid rgba(236, 224, 245, 0.22);
   box-shadow: 0 22px 54px -18px rgba(0,0,0,0.92), 0 0 0 1px rgba(255,106,61,0.08);
@@ -439,19 +439,20 @@
 }
 .socialdock.in { opacity: 1; transform: translateX(-50%) translateY(0); }
 .socialdock.away { opacity: 0; transform: translateX(-50%) translateY(140%); pointer-events: none; }
-.socialdock__label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: #ffffff; white-space: nowrap; }
-.socialdock__row { display: flex; gap: 3px; }
-.sdk { width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; color: #ffffff; transition: color .35s var(--ease), background .35s var(--ease); position: relative; }
-.socialdock__ic { width: 24px; height: 24px; display: block; }
+.socialdock__label { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase; color: #ffffff; white-space: nowrap; }
+.socialdock__row { display: flex; gap: 4px; }
+.sdk { width: 62px; height: 62px; border-radius: 50%; display: grid; place-items: center; color: #ffffff; transition: color .35s var(--ease), background .35s var(--ease); position: relative; }
+.socialdock__ic { width: 30px; height: 30px; display: block; }
 .sdk.live:hover { color: var(--accent-bright); background: var(--accent-soft); }
 .sdk.soon { color: #ffffff; opacity: 0.78; cursor: default; }
-.sdk.soon::after { content: ""; position: absolute; right: 8px; bottom: 9px; width: 3.5px; height: 3.5px; border-radius: 50%; background: var(--accent); opacity: 0.7; }
+.sdk.soon::after { content: ""; position: absolute; right: 11px; bottom: 12px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); opacity: 0.7; }
 
 @media (max-width: 620px) {
-  .socialdock { left: 0; right: 0; bottom: 0; width: 100%; transform: translateY(140%); border-radius: 16px 16px 0 0; justify-content: center; gap: 8px; padding: 9px 8px; }
+  .socialdock { left: 0; right: 0; bottom: 0; width: 100%; transform: translateY(140%); border-radius: 16px 16px 0 0; justify-content: center; gap: 3px; padding: 10px 6px; }
   .socialdock.in { transform: translateY(0); }
   .socialdock.away { transform: translateY(140%); }
   .socialdock__label { display: none; }
-  .sdk { width: 52px; height: 52px; }
-  .socialdock__ic { width: 24px; height: 24px; }
+  .socialdock__row { gap: 3px; }
+  .sdk { width: 54px; height: 54px; }
+  .socialdock__ic { width: 28px; height: 28px; }
 }
