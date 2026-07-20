@@ -18,6 +18,19 @@ function fallbackProducts(): ShopProduct[] {
   }))
 }
 
+/* The API contract is a plain array, but a stale/old backend can answer 200 with a
+   different shape (e.g. a paginated {content:[...]} object). fetchJson only rejects
+   on non-2xx, so that wrong-but-successful body would otherwise reach render() and
+   throw on .map — take the static fallback instead of white-screening. Also coerce
+   each product's variants to an array so a single malformed row can't crash a card. */
+function normalizeProducts(raw: unknown): ShopProduct[] {
+  if (!Array.isArray(raw)) return fallbackProducts()
+  return raw.map((p) => ({
+    ...(p as ShopProduct),
+    variants: Array.isArray((p as ShopProduct).variants) ? (p as ShopProduct).variants : [],
+  }))
+}
+
 /** First occurrence order, empties dropped — variants arrive pre-sorted by the API. */
 function uniqueInOrder(values: (string | null | undefined)[]): string[] {
   const out: string[] = []
@@ -212,7 +225,7 @@ function StorePage() {
     shopApi
       .products()
       .then((r) => {
-        if (on) setProducts(r)
+        if (on) setProducts(normalizeProducts(r))
       })
       .catch(() => {
         if (on) setProducts(fallbackProducts())
