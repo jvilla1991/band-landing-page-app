@@ -128,8 +128,8 @@ export const site: SiteConfig = {
 
   assets: {
     iconMark: '/images/villxin-logo.png',
-    emblem: '/images/villxin-logo.png',
-    wordmark: '/images/villxin-title-2.png',
+    emblem: '/images/villxin_heart_transparent_cropped.png',
+    wordmark: '/images/title-2-white.png',
     coverArt: '/images/moonlight-cover.jpg',
     pressPhoto: '', // empty -> placeholder frame
     ogImage: '/images/og-image.jpg',
