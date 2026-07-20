@@ -3,6 +3,10 @@ import type { ReactNode } from 'react'
 export type IconName =
   | 'spotify'
   | 'apple'
+  | 'amazon'
+  | 'tidal'
+  | 'deezer'
+  | 'soundcloud'
   | 'bandcamp'
   | 'youtube'
   | 'instagram'
@@ -60,6 +64,31 @@ const ICONS: Record<IconName, JSX.Element> = {
       <path d="M16 7c0 5-3 6-3 10" />
       <circle cx={9.5} cy={16.5} r={2.4} />
       <path d="M11.9 16.2V7.3c0-0.5 0.3-0.9 0.8-1L16 5.4" />
+    </Svg>
+  ),
+  amazon: (
+    <Svg>
+      <path d="M5 13.5c3.7 3.6 10.3 3.6 14 0" />
+      <path d="M15.6 15.6c1.4-.2 2.7-.8 3.9-1.9l-.3 3" />
+    </Svg>
+  ),
+  tidal: (
+    <Svg>
+      <path d="M3.2 9.7 6 6.9l2.8 2.8L6 12.5z" />
+      <path d="M8.8 9.7 11.6 6.9l2.8 2.8-2.8 2.8z" />
+      <path d="M14.4 9.7 17.2 6.9 20 9.7l-2.8 2.8z" />
+      <path d="M8.8 15.3 11.6 12.5l2.8 2.8-2.8 2.8z" />
+    </Svg>
+  ),
+  deezer: (
+    <Svg>
+      <path d="M5 16v-3.5M9.7 16v-8M14.3 16v-5.5M19 16v-9" strokeWidth={2} />
+    </Svg>
+  ),
+  soundcloud: (
+    <Svg>
+      <path d="M4 15v-3M7 15v-5M10 15v-7M13 15v-4.5" strokeWidth={1.5} />
+      <path d="M13 15h4.6a2.7 2.7 0 1 0-1.4-5" strokeWidth={1.5} />
     </Svg>
   ),
   bandcamp: (

@@ -42,12 +42,18 @@ function ReleaseBand() {
               )}
             </p>
             <div className="release__cta">
-              <a className="btn btn--primary" href={rel.primaryCta.href}>
-                {rel.primaryCta.label}
-                <span className="arr" style={{ width: 16, height: 16, display: 'inline-block' }}>
-                  <Icon name="arrow" />
-                </span>
-              </a>
+              {rel.primaryCta.disabled ? (
+                <button className="btn btn--primary" type="button" disabled>
+                  {rel.primaryCta.label}
+                </button>
+              ) : (
+                <a className="btn btn--primary" href={rel.primaryCta.href}>
+                  {rel.primaryCta.label}
+                  <span className="arr" style={{ width: 16, height: 16, display: 'inline-block' }}>
+                    <Icon name="arrow" />
+                  </span>
+                </a>
+              )}
             </div>
           </div>
         </div>

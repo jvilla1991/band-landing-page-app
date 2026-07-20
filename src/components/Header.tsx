@@ -4,12 +4,12 @@ import { useOpenModal } from '../context/ModalContext'
 
 export type Page = 'home' | 'store' | 'yourarea'
 
-const NAV: { label: string; href: string; page?: Page }[] = [
+const NAV: { label: string; href: string; page?: Page; disabled?: boolean }[] = [
   { label: 'Home', href: '#top' },
   { label: 'Listen', href: '#listen' },
   { label: 'About', href: '#about' },
   { label: 'Store', href: '#/store', page: 'store' },
-  { label: 'YourArea', href: '#/yourarea', page: 'yourarea' },
+  { label: 'YourArea', href: '#/yourarea', page: 'yourarea', disabled: true },
   { label: 'Contact', href: '#contact' },
 ]
 
@@ -43,11 +43,18 @@ function Header({ page }: { page: Page }) {
             <span className="brand__name">{site.artistName}</span>
           </a>
           <nav className="nav" aria-label="Primary">
-            {NAV.map((n) => (
-              <a key={n.href} href={n.href} className={n.page && n.page === page ? 'is-current' : undefined}>
-                {n.label}
-              </a>
-            ))}
+            {NAV.map((n) =>
+              n.disabled ? (
+                <span key={n.href} className="nav__soon" aria-disabled="true" title="Coming soon">
+                  {n.label}
+                  <small>soon</small>
+                </span>
+              ) : (
+                <a key={n.href} href={n.href} className={n.page && n.page === page ? 'is-current' : undefined}>
+                  {n.label}
+                </a>
+              ),
+            )}
             <button className="cta" type="button" onClick={openModal}>
               Mailing List
             </button>
@@ -66,12 +73,20 @@ function Header({ page }: { page: Page }) {
       </header>
 
       <div className={'msheet' + (open ? ' open' : '')}>
-        {NAV.map((n, i) => (
-          <a key={n.href} href={n.href} onClick={() => setOpen(false)}>
-            <span className="ix">{String(i + 1).padStart(2, '0')}</span>
-            {n.label}
-          </a>
-        ))}
+        {NAV.map((n, i) =>
+          n.disabled ? (
+            <span key={n.href} className="msheet__soon" aria-disabled="true">
+              <span className="ix">{String(i + 1).padStart(2, '0')}</span>
+              {n.label}
+              <small>soon</small>
+            </span>
+          ) : (
+            <a key={n.href} href={n.href} onClick={() => setOpen(false)}>
+              <span className="ix">{String(i + 1).padStart(2, '0')}</span>
+              {n.label}
+            </a>
+          ),
+        )}
         <button
           onClick={() => {
             setOpen(false)

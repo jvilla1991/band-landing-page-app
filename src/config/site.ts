@@ -8,6 +8,10 @@ export type PlatformId =
   | 'tiktok'
   | 'facebook'
   | 'discord'
+  | 'tidal'
+  | 'amazon'
+  | 'soundcloud'
+  | 'deezer'
 
 export interface LinkItem {
   id: PlatformId
@@ -84,7 +88,8 @@ export interface SiteConfig {
     status: 'coming-soon' | 'out'
     releaseDate: string
     releaseDateLabel: string
-    primaryCta: { label: string; href: string }
+    /** disabled -> rendered as a non-clickable button (e.g. pre-save not open yet). */
+    primaryCta: { label: string; href: string; disabled?: boolean }
   }
   tracks: Track[]
   streaming: LinkItem[]
@@ -123,32 +128,36 @@ export const site: SiteConfig = {
 
   assets: {
     iconMark: '/images/villxin-logo.png',
-    emblem: '/images/villxin-logo.png',
-    wordmark: '/images/villxin-title-2.png',
-    coverArt: '', // empty -> placeholder frame
-    pressPhoto: '', // empty -> placeholder frame
+    emblem: '/images/villxin_heart_transparent_cropped.png',
+    wordmark: '/images/title-white-cropped.png',
+    coverArt: '/images/moonlight-cover.jpg',
+    pressPhoto: '/images/villxin-press-cropped.png',
     ogImage: '/images/og-image.jpg',
   },
 
   latestRelease: {
     type: 'Debut Single',
-    title: 'Ashfall',
+    title: 'Moonlight',
     status: 'coming-soon',
-    releaseDate: '2026.09.04',
-    releaseDateLabel: 'Sep 4, 2026',
-    primaryCta: { label: 'Pre-save', href: '#' },
+    releaseDate: '2026.08.14',
+    releaseDateLabel: 'Aug 14, 2026',
+    primaryCta: { label: 'Pre-Save (Coming soon)', href: '#', disabled: true },
   },
 
   tracks: [
-    { title: 'Moonlight', note: 'Demo · coming soon', src: '/audio/Moonlight (Demo).wav' },
-    { title: 'Freed From Chains', note: 'Demo preview', src: '/audio/Freed From Chains (Demo).wav' },
-    { title: 'Up In Smoke', note: 'Demo preview', src: '/audio/Up In Smoke (Demo).wav' },
+    { title: 'Moonlight', note: 'Demo · out Aug 14, 2026', src: '/audio/Moonlight (Demo).wav' },
+    { title: 'Freed From Chains', note: 'Demo · mid September', src: '/audio/Freed From Chains (Demo).wav' },
+    { title: 'Up In Smoke', note: 'Demo · coming soon', src: '/audio/Up In Smoke (Demo).wav' },
   ],
 
   /* href empty -> renders as "coming soon" / disabled */
   streaming: [
     { id: 'spotify', label: 'Spotify', href: '' },
     { id: 'apple', label: 'Apple Music', href: '' },
+    { id: 'amazon', label: 'Amazon Music', href: '' },
+    { id: 'tidal', label: 'Tidal', href: '' },
+    { id: 'deezer', label: 'Deezer', href: '' },
+    { id: 'soundcloud', label: 'SoundCloud', href: '' },
     { id: 'bandcamp', label: 'Bandcamp', href: '' },
     { id: 'youtube', label: 'YouTube', href: '' },
   ],
@@ -156,24 +165,23 @@ export const site: SiteConfig = {
   social: [
     { id: 'instagram', label: 'Instagram', href: 'https://www.instagram.com/villxin_music/' },
     { id: 'x', label: 'X', href: 'https://x.com/villxin_music' },
-    { id: 'youtube', label: 'YouTube', href: 'https://www.youtube.com/@villxin-music' },
+    { id: 'youtube', label: 'YouTube', href: 'https://www.youtube.com/@villxin-music/shorts' },
     { id: 'tiktok', label: 'TikTok', href: 'https://www.tiktok.com/@villxin_music' },
     { id: 'facebook', label: 'Facebook', href: 'https://www.facebook.com/villxin.music' },
-    { id: 'discord', label: 'Discord', href: 'https://discord.gg/DVtjsUPrJQ' },
   ],
 
   about: {
     genre: 'Independent ambient-metalcore',
-    lead: 'villxin is the solo project of a writer chasing the space between stillness and collapse.',
+    lead: 'VILLXIN is the embraced duality of being human.',
     body: [
-      'Built from layered guitar drones, field recordings and slow-burning percussion, villxin sits where ambient texture meets the weight of metalcore. Tracks open in near-silence and end underwater.',
-      'Self-produced and unsigned, the project is releasing its first body of work in 2026 — a study in restraint and rupture.',
+      'Driven by a percussive low end, but without sacrificing the crispness that guitar brings to metal, villxin sits where ambient texture meets the weight of metal and metalcore. Tracks open like scenes from a dark romance movie gone right.',
+      'The roots of Villxin trace back as early as 2019. Now, highly collaborative and unsigned, the project is releasing its first body of work in 2026.',
     ],
   },
 
   press: [
-    { quote: 'Glacial, immense, and quietly devastating.', source: 'Pull-quote slot — add press here' },
-    { quote: 'Ambient music with teeth.', source: 'Pull-quote slot — add press here' },
+    { quote: 'something something Darkside.', source: 'Emporer Palpatine' },
+    { quote: 'They always win sometimes.', source: 'Jesus H. Christ' },
   ],
 
   pressKit: {
@@ -183,8 +191,8 @@ export const site: SiteConfig = {
   },
 
   contact: {
-    bookingEmail: 'booking@villxin.com',
-    bookingNote: 'Booking, press, sync & collaboration',
+    bookingEmail: 'management@villxin.com',
+    bookingNote: '',
     generalEmail: 'hello@villxin.com',
     generalNote: 'Everything else',
     dms: [
