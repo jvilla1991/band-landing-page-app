@@ -1,10 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { site } from '../config/site'
-import { useOpenModal } from '../context/ModalContext'
-import Icon from './Icon'
 
 function Hero() {
-  const openModal = useOpenModal()
   const emblemRef = useRef<HTMLDivElement>(null)
   const innerRef = useRef<HTMLDivElement>(null)
 
@@ -31,7 +28,6 @@ function Hero() {
     }
   }, [])
 
-  const rel = site.latestRelease
   const wordmark = site.assets.wordmark
 
   return (
@@ -52,31 +48,6 @@ function Hero() {
             <span className="hero__wordmark--text">{site.artistName}</span>
           )}
         </h1>
-        <p className="hero__tag">{site.tagline}</p>
-
-        <div className="hero__teaser">
-          <span>{rel.type}</span>
-          <span className="sep" />
-          <b className="em">{rel.title}</b>
-          <span className="sep" />
-          <span>{rel.status === 'out' ? 'Out now' : `Coming ${rel.releaseDateLabel}`}</span>
-        </div>
-
-        <div className="hero__cta">
-          <button className="btn btn--primary" type="button" onClick={openModal}>
-            Join the mailing list
-            <span className="arr" style={{ width: 16, height: 16, display: 'inline-block' }}>
-              <Icon name="arrow" />
-            </span>
-          </button>
-          <a className="btn" href="#listen">
-            Hear the demos
-          </a>
-        </div>
-      </div>
-      <div className="scrollhint">
-        <span>Scroll</span>
-        <span className="ln" />
       </div>
     </section>
   )
