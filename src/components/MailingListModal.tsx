@@ -46,12 +46,8 @@ function MailingListModal({ open, onClose }: MailingListModalProps) {
         </div>
         <div className="modal__eyebrow">Before you go in</div>
         <h2 className="modal__title" id="modal-title">
-          First to hear it
+          We'll want you to be the first to hear it
         </h2>
-        <p className="modal__lead">
-          {site.artistName}&apos;s debut is coming. One email when it lands — the release, the
-          moment it&apos;s out. No noise, ever.
-        </p>
 
         <MailingListForm />
 
