@@ -53,7 +53,7 @@ function MailingListModal({ open, onClose }: MailingListModalProps) {
 
         <div className="modal__later">
           <button type="button" onClick={onClose}>
-            No thanks — take me in
+            Maybe later
           </button>
         </div>
       </div>
