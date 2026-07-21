@@ -165,7 +165,8 @@ button { font-family: inherit; cursor: pointer; }
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  white-space: nowrap;
+  /* no white-space: nowrap — the Printify/Stripe note is wider than a phone screen and
+     must be allowed to wrap; on desktop it still fits one line */
 }
 .protonote i { width: 5px; height: 5px; border-radius: 50%; background: var(--text-faint); font-style: normal; }
 

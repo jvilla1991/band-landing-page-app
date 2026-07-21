@@ -80,10 +80,14 @@
 /* mobile menu sheet */
 .msheet {
   position: fixed; inset: 0; z-index: 999; background: rgba(7,5,10,0.97);
-  backdrop-filter: blur(18px); display: flex; flex-direction: column; justify-content: center;
-  padding: var(--pad);
+  backdrop-filter: blur(18px); display: flex; flex-direction: column;
+  padding: var(--pad); overflow-y: auto;
   opacity: 0; visibility: hidden; transition: opacity .5s var(--ease), visibility .5s;
 }
+/* auto margins center the menu when there's room, but unlike justify-content: center
+   they never push the first items above the scrollable area on short screens */
+.msheet > :first-child { margin-top: auto; }
+.msheet > :last-child { margin-bottom: auto; }
 .msheet.open { opacity: 1; visibility: visible; }
 .msheet a, .msheet button {
   font-family: var(--font-display); font-size: clamp(2rem, 10vw, 3rem); font-weight: 800;
@@ -250,9 +254,12 @@
 .links-head h3 { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--text-dim); margin: 0; font-weight: 400; }
 
 .lgrid { display: grid; gap: 12px; }
-/* Even column count only (never an orphan odd tile): 2 up on small, 4 up (2 rows of 4) once there's room. */
-.lgrid--stream { grid-template-columns: repeat(2, 1fr); }
-@media (min-width: 700px) { .lgrid--stream { grid-template-columns: repeat(4, 1fr); } }
+/* Even column count only (never an orphan odd tile): 1 up on phones, 2 up on small, 4 up (2 rows of 4) once there's room.
+   minmax(0,1fr) — a bare 1fr can't shrink below the tile's content (icon + label + pill), which forces the
+   track wider than the viewport on phones and gives the whole page a horizontal scroll bar. */
+.lgrid--stream { grid-template-columns: 1fr; }
+@media (min-width: 480px) { .lgrid--stream { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 700px) { .lgrid--stream { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 .lgrid--social { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
 
 .lnk {
@@ -295,13 +302,14 @@
   box-shadow: 0 60px 140px -40px rgba(0,0,0,0.95), 0 0 0 1px rgba(255,106,61,0.08);
   padding: clamp(28px, 5vw, 48px); text-align: center;
   transform: translateY(24px) scale(0.98); opacity: 0; transition: transform .55s var(--ease), opacity .55s var(--ease);
-  max-height: 92vh; overflow-y: auto;
+  /* cap below the scrim's 20px padding so the modal never clips on short (landscape) phones */
+  max-height: calc(100vh - 40px); max-height: calc(100dvh - 40px); overflow-y: auto;
 }
 .modal-scrim.open .modal { transform: none; opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .modal { transform: none; } }
 
 .modal__close {
-  position: absolute; top: 14px; right: 14px; width: 40px; height: 40px; border-radius: 50%;
+  position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; border-radius: 50%;
   border: 1px solid var(--line); background: transparent; color: var(--text-dim);
   display: grid; place-items: center; transition: all .3s var(--ease); z-index: 3;
 }
@@ -315,8 +323,8 @@
 .modal__eyebrow { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--accent-bright); margin-top: 12px; }
 .modal__title { font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: clamp(1.7rem, 6vw, 2.5rem); line-height: 0.98; letter-spacing: -0.015em; margin: 12px 0 0; }
 .modal__lead { color: var(--text-dim); margin: 14px auto 0; max-width: 38ch; font-size: 0.97rem; text-wrap: pretty; }
-.modal__later { margin-top: 18px; }
-.modal__later button { background: none; border: 0; cursor: pointer; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-faint); transition: color .3s var(--ease); }
+.modal__later { margin-top: 6px; }
+.modal__later button { background: none; border: 0; cursor: pointer; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-faint); transition: color .3s var(--ease); padding: 14px 16px; }
 .modal__later button:hover { color: var(--text-dim); }
 
 /* ---- shared mailing form ---- */
@@ -397,7 +405,8 @@
 .ccard:hover { border-color: var(--line-2); }
 .ccard__k { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--accent-bright); }
 .ccard__v { font-family: var(--font-display); font-size: clamp(1.3rem, 3.5vw, 1.8rem); font-weight: 700; line-height: 1.2; letter-spacing: -0.01em; }
-.ccard__v a { transition: color .4s var(--ease); }
+/* inline-block + padding/negative-margin: 44px-ish tap target without moving the layout */
+.ccard__v a { transition: color .4s var(--ease); display: inline-block; padding: 8px 0; margin: -8px 0; }
 .ccard__v a:hover { color: var(--accent-bright); }
 .ccard__sub { color: var(--text-dim); font-size: 0.92rem; }
 .ccard__dms { display: flex; gap: 10px; flex-wrap: wrap; margin-top: auto; }
@@ -416,7 +425,8 @@
 .ftr__brand .nm { font-family: var(--font-display); font-size: 1.3rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; }
 .ftr__bottom { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-top: 24px; border-top: 1px solid var(--line); }
 .ftr__cp { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-faint); }
-.totop { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); display: inline-flex; align-items: center; gap: 10px; transition: color .4s var(--ease); background: none; border: 0; cursor: pointer; }
+/* padding + matching negative margin = 44px tap target with zero layout shift */
+.totop { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-dim); display: inline-flex; align-items: center; gap: 10px; transition: color .4s var(--ease); background: none; border: 0; cursor: pointer; padding: 14px 12px; margin: -14px -12px; }
 .totop:hover { color: var(--accent-bright); }
 .totop .up { transition: transform .5s var(--ease); }
 .totop:hover .up { transform: translateY(-3px); }
