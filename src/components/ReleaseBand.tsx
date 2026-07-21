@@ -7,6 +7,8 @@ function ReleaseBand() {
   const rel = site.latestRelease
   const cover = site.assets.coverArt
   const out = rel.status === 'out'
+  /* off-site CTAs (pre-save, smart links) open in a new tab */
+  const ctaExternal = /^https?:\/\//i.test(rel.primaryCta.href)
 
   return (
     <section className="section relband" id="release">
@@ -47,7 +49,12 @@ function ReleaseBand() {
                   {rel.primaryCta.label}
                 </button>
               ) : (
-                <a className="btn btn--primary" href={rel.primaryCta.href}>
+                <a
+                  className="btn btn--primary"
+                  href={rel.primaryCta.href}
+                  target={ctaExternal ? '_blank' : undefined}
+                  rel={ctaExternal ? 'noopener noreferrer' : undefined}
+                >
                   {rel.primaryCta.label}
                   <span className="arr" style={{ width: 16, height: 16, display: 'inline-block' }}>
                     <Icon name="arrow" />
