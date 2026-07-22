@@ -5,8 +5,13 @@ import SocialDock from './components/SocialDock'
 import MailingListModal from './components/MailingListModal'
 import HomePage from './pages/HomePage'
 import StorePage from './pages/StorePage'
+import LivePage from './pages/LivePage'
 import YourAreaPage from './pages/YourAreaPage'
+import AdminPage from './pages/AdminPage'
+import UnderConstructionPage from './pages/UnderConstructionPage'
 import { ModalContext } from './context/ModalContext'
+import { FlagsContext, useFlags } from './context/FlagsContext'
+import { SiteFlags, cachedFlags, fetchFlags } from './config/siteFlags'
 import './styles/App.css'
 
 const ML_SEEN_KEY = 'villxin_ml_seen'
@@ -16,13 +21,50 @@ const ML_SEEN_KEY = 'villxin_ml_seen'
 function getPage(): Page {
   const hash = window.location.hash
   if (hash.startsWith('#/store')) return 'store'
+  if (hash.startsWith('#/live')) return 'live'
   if (hash.startsWith('#/yourarea')) return 'yourarea'
+  if (hash.startsWith('#/admin')) return 'admin'
   return 'home'
+}
+
+/* Flag-gated routing: a toggled-off page renders Under Construction instead.
+   #/admin is deliberately never gated — it's how pages get turned back on. */
+function CurrentPage({ page }: { page: Page }) {
+  const flags = useFlags()
+  switch (page) {
+    case 'store':
+      return flags.store ? <StorePage /> : <UnderConstructionPage title="The store" />
+    case 'live':
+      return flags.live ? <LivePage /> : <UnderConstructionPage title="Live" />
+    case 'yourarea':
+      return flags.yourarea ? <YourAreaPage /> : <UnderConstructionPage title="YourArea" />
+    case 'admin':
+      return <AdminPage />
+    default:
+      return <HomePage />
+  }
 }
 
 function App() {
   const [page, setPage] = useState<Page>(getPage)
   const [modalOpen, setModalOpen] = useState(false)
+
+  // flags render from last-known state immediately, then refresh from the API;
+  // a dead API keeps the cached/default nav rather than blanking tabs
+  const [flags, setFlags] = useState<SiteFlags>(cachedFlags)
+  useEffect(() => {
+    let cancelled = false
+    fetchFlags()
+      .then((fresh) => {
+        if (!cancelled) setFlags(fresh)
+      })
+      .catch(() => {
+        /* keep last-known/default flags */
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   const openModal = () => setModalOpen(true)
   const closeModal = () => {
@@ -43,7 +85,7 @@ function App() {
   // after a page switch, land on the right spot: top of the store, or the
   // anchored section on home (the element didn't exist until this render)
   useEffect(() => {
-    if (page === 'store') {
+    if (page === 'store' || page === 'live' || page === 'admin') {
       window.scrollTo(0, 0)
       return
     }
@@ -55,7 +97,7 @@ function App() {
     }
   }, [page])
 
-  // greet on entry (once per session)
+  // greet on entry (once per session; never over the admin console)
   useEffect(() => {
     let seen = false
     try {
@@ -63,21 +105,23 @@ function App() {
     } catch {
       /* storage unavailable */
     }
-    if (!seen) {
+    if (!seen && getPage() !== 'admin') {
       const id = setTimeout(() => setModalOpen(true), 1000)
       return () => clearTimeout(id)
     }
   }, [])
 
   return (
-    <ModalContext.Provider value={openModal}>
-      <Header page={page} />
-      {page === 'store' ? <StorePage /> : page === 'yourarea' ? <YourAreaPage /> : <HomePage />}
-      <Footer />
+    <FlagsContext.Provider value={flags}>
+      <ModalContext.Provider value={openModal}>
+        <Header page={page} />
+        <CurrentPage page={page} />
+        <Footer />
 
-      <SocialDock hidden={modalOpen} />
-      <MailingListModal open={modalOpen} onClose={closeModal} />
-    </ModalContext.Provider>
+        <SocialDock hidden={modalOpen} />
+        <MailingListModal open={modalOpen} onClose={closeModal} />
+      </ModalContext.Provider>
+    </FlagsContext.Provider>
   )
 }
 
