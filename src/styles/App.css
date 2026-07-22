@@ -482,7 +482,9 @@
 /* ============================================================
    LIVE — shows list
    ============================================================ */
-.live { padding-top: 120px; min-height: 70vh; }
+/* container class is .livepage, NOT .live — "live" is already a modifier on
+   social dock icons (.sdk.live) and link tiles (.lnk.live) */
+.livepage { padding-top: 120px; min-height: 70vh; }
 .live__eyebrow { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--accent-bright); }
 .live__title { font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: clamp(2.4rem, 8vw, 4.5rem); line-height: 0.95; letter-spacing: -0.015em; margin: 10px 0 0; }
 .live__body { padding: 44px 0 90px; }

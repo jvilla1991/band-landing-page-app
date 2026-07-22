@@ -57,7 +57,7 @@ function LivePage() {
   }, [])
 
   return (
-    <main className="live">
+    <main className="livepage">
       <section className="live__hero">
         <div className="wrap">
           <div className="live__eyebrow">Live</div>
