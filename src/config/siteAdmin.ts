@@ -88,6 +88,13 @@ export interface SyncResult {
   deactivated: number
 }
 
+export interface ReleaseLocksResult {
+  released: number
+  alreadyUnlocked: number
+  /** "Product title: reason" per product Printify refused to unlock. */
+  failures: string[]
+}
+
 export const adminApi = {
   setFlag: (name: keyof SiteFlags, enabled: boolean) =>
     adminFetch<SiteFlags>(`/api/site/admin/flags/${name}`, { method: 'PUT', body: { enabled } }),
@@ -97,4 +104,5 @@ export const adminApi = {
     adminFetch<Show>(`/api/site/admin/shows/${id}`, { method: 'PUT', body: input }),
   deleteShow: (id: number) => adminFetch<void>(`/api/site/admin/shows/${id}`, { method: 'DELETE' }),
   syncStore: () => adminFetch<SyncResult>('/api/shop/sync', { method: 'POST' }),
+  releaseLocks: () => adminFetch<ReleaseLocksResult>('/api/shop/release-locks', { method: 'POST' }),
 }

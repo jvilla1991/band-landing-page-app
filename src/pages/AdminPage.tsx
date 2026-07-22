@@ -264,20 +264,43 @@ function ShowsPanel() {
   )
 }
 
+function plural(n: number, word: string) {
+  return `${n} ${word}${n === 1 ? '' : 's'}`
+}
+
 function StorePanel() {
   const [result, setResult] = useState('')
-  const [busy, setBusy] = useState(false)
+  const [busy, setBusy] = useState<'sync' | 'unlock' | null>(null)
 
   const sync = async () => {
-    setBusy(true)
+    setBusy('sync')
     setResult('')
     try {
       const r = await adminApi.syncStore()
-      setResult(`Done — ${r.synced} product${r.synced === 1 ? '' : 's'} synced, ${r.deactivated} deactivated.`)
+      setResult(`Done — ${plural(r.synced, 'product')} synced, ${r.deactivated} deactivated.`)
     } catch (err) {
       setResult(err instanceof ApiError ? `Sync failed: ${err.message}` : 'Sync failed')
     } finally {
-      setBusy(false)
+      setBusy(null)
+    }
+  }
+
+  const releaseLocks = async () => {
+    setBusy('unlock')
+    setResult('')
+    try {
+      const r = await adminApi.releaseLocks()
+      const parts = [
+        r.released > 0
+          ? `Unlocked ${plural(r.released, 'product')} — you can edit prices and delete them in Printify now.`
+          : 'Nothing was locked.',
+      ]
+      if (r.failures.length) parts.push(`Couldn't unlock: ${r.failures.join('; ')}`)
+      setResult(parts.join(' '))
+    } catch (err) {
+      setResult(err instanceof ApiError ? `Unlock failed: ${err.message}` : 'Unlock failed')
+    } finally {
+      setBusy(null)
     }
   }
 
@@ -287,8 +310,15 @@ function StorePanel() {
       <p className="adm__hint">
         Pulls the Printify catalog onto the site. Run after changing products or prices in Printify.
       </p>
-      <button className="btn btn--primary" type="button" onClick={sync} disabled={busy}>
-        {busy ? 'Syncing…' : 'Sync store from Printify'}
+      <button className="btn btn--primary" type="button" onClick={sync} disabled={busy !== null}>
+        {busy === 'sync' ? 'Syncing…' : 'Sync store from Printify'}
+      </button>
+      <p className="adm__hint adm__hint--spaced">
+        Printify freezes a product when you press Publish there, blocking price edits and deletes.
+        This releases those locks — the site never needed Printify&apos;s publishing.
+      </p>
+      <button className="btn btn--ghost adm__unlock" type="button" onClick={releaseLocks} disabled={busy !== null}>
+        {busy === 'unlock' ? 'Releasing…' : 'Release Printify locks'}
       </button>
       {result && <p className="adm__result">{result}</p>}
     </section>
