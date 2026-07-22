@@ -16,6 +16,13 @@ import './styles/App.css'
 
 const ML_SEEN_KEY = 'villxin_ml_seen'
 
+/* villxin.com/admin/login (or /admin) is the memorable owner entry point.
+   Cloudflare Pages serves index.html for unknown paths, so the app boots here;
+   normalize into the hash route once so the rest of the router stays hash-only. */
+if (window.location.pathname.startsWith('/admin')) {
+  window.history.replaceState(null, '', '/#/admin')
+}
+
 /* Hash-based page switch ("#/store" -> store, "#/yourarea..." -> yourarea) —
    plain "#section" hashes stay on home so in-page anchors keep working. */
 function getPage(): Page {
