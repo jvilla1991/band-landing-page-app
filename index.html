@@ -2,46 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-test.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-test.png" />
-    <link rel="apple-touch-icon" href="/images/favicon-test.png" />
-    <script>
-      // Create zoomed/cropped favicon dynamically
-      (function() {
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.onload = function() {
-          // Create canvas for zoomed favicon (2x zoom = crop center 50%)
-          const canvas = document.createElement('canvas');
-          const size = 32; // Favicon size
-          canvas.width = size;
-          canvas.height = size;
-          const ctx = canvas.getContext('2d');
-
-          // Zoom in by 2x (crop to center 50% of image)
-          const sourceSize = Math.min(img.width, img.height);
-          const sourceX = (img.width - sourceSize) / 2;
-          const sourceY = (img.height - sourceSize) / 2;
-          const zoomFactor = 2; // Zoom in 2x
-          const scaledSize = sourceSize / zoomFactor;
-          const scaledX = sourceX + (sourceSize - scaledSize) / 2;
-          const scaledY = sourceY + (sourceSize - scaledSize) / 2;
-
-          // Draw zoomed/cropped image
-          ctx.drawImage(img, scaledX, scaledY, scaledSize, scaledSize, 0, 0, size, size);
-
-          // Update favicon
-          const favicon = document.querySelector("link[rel='icon']") || document.createElement('link');
-          favicon.type = 'image/png';
-          favicon.rel = 'icon';
-          favicon.href = canvas.toDataURL('image/png');
-          if (!document.querySelector("link[rel='icon']")) {
-            document.head.appendChild(favicon);
-          }
-        };
-        img.src = '/images/favicon-test.png';
-      })();
-    </script>
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png" />
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#07050a" />
     <meta name="description" content="independent ambient-metalcore. Debut single coming 2026. Join the mailing list." />
