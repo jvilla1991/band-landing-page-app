@@ -523,7 +523,10 @@
 .adm__title { font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: clamp(1.8rem, 5vw, 2.6rem); letter-spacing: -0.015em; margin: 0; }
 .adm__err { color: var(--accent-bright); font-size: 0.92rem; margin: 10px 0 0; }
 .adm__hint { color: var(--text-faint); font-size: 0.9rem; margin: 4px 0 14px; }
-.adm__result { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; color: var(--text-dim); margin: 12px 0 0; }
+.adm__result { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; color: var(--text-dim); margin: 12px 0 0; line-height: 1.7; }
+.adm__hint--spaced { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
+.adm__unlock { border: 1px solid var(--line-2); padding-inline: 20px; }
+.adm__unlock:hover { border-color: var(--accent-line); }
 
 .adm__login { display: flex; flex-direction: column; gap: 14px; max-width: 360px; margin-top: 20px; }
 .adm__login label, .adm__grid label { display: flex; flex-direction: column; gap: 6px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-faint); }
