@@ -47,7 +47,7 @@
   /* --- rhythm --- */
   --maxw: 1180px;
   --pad: clamp(20px, 5vw, 64px);
-  --section-y: clamp(62px, 9vw, 120px);
+  --section-y: clamp(48px, 6vw, 80px);
   --radius: 4px;
   --radius-lg: 8px;
 
