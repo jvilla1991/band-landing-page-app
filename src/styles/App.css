@@ -2,24 +2,8 @@
    villxin — section styles  (ember + violet on near-black)
    ============================================================ */
 
-/* ---------- atmosphere: drifting ember/violet fog ---------- */
-.fog {
-  position: absolute;
-  inset: -20% -10%;
-  pointer-events: none;
-  z-index: 0;
-  background:
-    radial-gradient(38% 48% at 22% 28%, rgba(217,64,42,0.10), transparent 70%),
-    radial-gradient(45% 55% at 82% 68%, rgba(110,44,143,0.14), transparent 72%);
-  filter: blur(26px);
-  opacity: 0.9;
-  animation: fogdrift 42s ease-in-out infinite alternate;
-}
-@keyframes fogdrift {
-  0%   { transform: translate3d(0,0,0) scale(1); }
-  100% { transform: translate3d(4%, -3%, 0) scale(1.14); }
-}
-@media (prefers-reduced-motion: reduce) { .fog { animation: none; } }
+/* ---------- atmosphere fog: element still rendered by sections, hidden in the flat theme ---------- */
+.fog { display: none; }
 
 /* ---------- reveal-on-scroll ---------- */
 .reveal { opacity: 0; transform: translateY(28px); transition: opacity 1.2s var(--ease), transform 1.2s var(--ease); }
@@ -118,18 +102,8 @@
 .hero { position: relative; min-height: 100svh; display: flex; align-items: center; overflow: hidden; padding: 80px 0 72px; text-align: center; }
 .hero__inner { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; }
 
-/* big bloom behind emblem */
-.hero__bloom {
-  position: absolute; z-index: 1; top: 52%; left: 50%; width: min(820px, 120vw); aspect-ratio: 1;
-  transform: translate(-50%, -50%); pointer-events: none;
-  background:
-    radial-gradient(closest-side, rgba(217,64,42,0.22), rgba(217,64,42,0.06) 45%, transparent 70%),
-    radial-gradient(closest-side, rgba(110,44,143,0.18), transparent 72%);
-  filter: blur(10px);
-  animation: pulse 7s ease-in-out infinite;
-}
-@keyframes pulse { 0%,100% { opacity: 0.75; transform: translate(-50%,-50%) scale(1); } 50% { opacity: 1; transform: translate(-50%,-50%) scale(1.06); } }
-@media (prefers-reduced-motion: reduce) { .hero__bloom { animation: none; } }
+/* bloom behind emblem: element still rendered, hidden in the flat theme */
+.hero__bloom { display: none; }
 
 .hero__emblem { width: clamp(220px, 42vw, 480px); aspect-ratio: 1; position: relative; margin-top: 16px; }
 .hero__emblem img {
@@ -176,7 +150,7 @@
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
   color: var(--text-faint); display: flex; flex-direction: column; align-items: center; gap: 10px;
 }
-.scrollhint .ln { width: 1px; height: 36px; background: linear-gradient(var(--accent-line), transparent); animation: drop 2.6s var(--ease) infinite; transform-origin: top; }
+.scrollhint .ln { width: 1px; height: 36px; background: var(--accent-line); animation: drop 2.6s var(--ease) infinite; transform-origin: top; }
 @keyframes drop { 0%,100% { transform: scaleY(0.4); opacity: .4; } 50% { transform: scaleY(1); opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .scrollhint .ln { animation: none; } }
 
@@ -187,17 +161,14 @@
 .relband__inner {
   position: relative; z-index: 2; display: grid; gap: clamp(28px, 5vw, 56px); align-items: center;
   border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(22px, 4vw, 40px);
-  background: linear-gradient(150deg, var(--surface), var(--bg-1));
+  background: var(--surface);
   box-shadow: 0 50px 110px -60px rgba(0,0,0,0.9);
 }
 @media (min-width: 820px) { .relband__inner { grid-template-columns: 280px 1fr; } }
 
 .release__cover {
   position: relative; aspect-ratio: 1; border-radius: 3px; overflow: hidden;
-  background:
-    radial-gradient(80% 60% at 35% 18%, rgba(217,64,42,0.26), transparent 58%),
-    radial-gradient(70% 60% at 75% 90%, rgba(110,44,143,0.30), transparent 62%),
-    linear-gradient(150deg, #1a0f12, #0a0610);
+  background: var(--bg-2);
   border: 1px solid var(--line); display: grid; place-items: center;
 }
 .release__cover img { width: 100%; height: 100%; object-fit: cover; }
@@ -236,13 +207,13 @@
   transition: all .4s var(--ease); flex-shrink: 0;
 }
 .track__btn:hover { border-color: var(--accent-line); color: var(--accent-bright); }
-.track.playing .track__btn { background: linear-gradient(150deg, var(--accent-glow), var(--accent)); border-color: transparent; color: #1a0805; box-shadow: 0 0 24px -4px rgba(255,106,61,0.6); }
+.track.playing .track__btn { background: var(--accent-bright); border-color: transparent; color: #1a0805; box-shadow: 0 0 24px -4px rgba(255,106,61,0.6); }
 .track__main { min-width: 0; }
 .track__name { display: flex; align-items: center; gap: 12px; }
 .track__name b { font-weight: 600; font-size: 1.02rem; }
 .track__sub { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-faint); margin-top: 3px; }
 .track__bar { height: 3px; background: var(--line); border-radius: 3px; margin-top: 12px; overflow: hidden; }
-.track__fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--violet-bright), var(--accent-glow)); transition: width .12s linear; }
+.track__fill { height: 100%; width: 0%; background: var(--accent-bright); transition: width .12s linear; }
 .track__time { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); letter-spacing: 0.06em; }
 
 /* ============================================================
@@ -296,9 +267,7 @@
 .modal-scrim.open { opacity: 1; visibility: visible; }
 .modal {
   position: relative; width: min(560px, 100%); border: 1px solid var(--line-2); border-radius: 6px;
-  background:
-    radial-gradient(120% 80% at 50% -10%, rgba(217,64,42,0.16), transparent 60%),
-    linear-gradient(170deg, var(--surface), var(--bg-1));
+  background: var(--surface);
   box-shadow: 0 60px 140px -40px rgba(0,0,0,0.95), 0 0 0 1px rgba(255,106,61,0.08);
   padding: clamp(28px, 5vw, 48px); text-align: center;
   transform: translateY(24px) scale(0.98); opacity: 0; transition: transform .55s var(--ease), opacity .55s var(--ease);
@@ -369,7 +338,7 @@
 .photo {
   position: relative; aspect-ratio: 4/5; border-radius: var(--radius); overflow: hidden;
   border: 1px solid var(--line);
-  background: radial-gradient(70% 50% at 50% 18%, rgba(217,64,42,0.18), transparent 58%), radial-gradient(80% 60% at 60% 95%, rgba(110,44,143,0.26), transparent 62%), linear-gradient(160deg, #160d1c, #07050a);
+  background: var(--bg-2);
   display: grid; place-items: center;
 }
 .photo img { width: 100%; height: 100%; object-fit: cover; }
