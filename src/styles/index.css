@@ -16,10 +16,10 @@
   --line:      rgba(236, 224, 245, 0.09);
   --line-2:    rgba(236, 224, 245, 0.16);
 
-  /* --- text --- */
-  --text:      #ece6f2;
-  --text-dim:  #ded8e6;
-  --text-faint:#a99cb8;
+  /* --- text (flat white across all tiers) --- */
+  --text:      #ffffff;
+  --text-dim:  #ffffff;
+  --text-faint:#ffffff;
 
   /* --- accent: molten ember (primary) --- */
   --accent:        #d9402a;
@@ -79,7 +79,7 @@ body {
   padding-bottom: 84px; /* clearance for the persistent social dock */
 }
 
-/* film grain + vignette over everything */
+/* film grain over everything */
 body::before {
   content: "";
   position: fixed;
@@ -89,14 +89,6 @@ body::before {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   opacity: 0.045;
   mix-blend-mode: overlay;
-}
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 8999;
-  background: radial-gradient(120% 90% at 50% 0%, transparent 55%, rgba(0,0,0,0.55) 100%);
 }
 
 img { max-width: 100%; display: block; }
@@ -202,13 +194,13 @@ button { font-family: inherit; cursor: pointer; }
 .btn:hover .arr { transform: translateX(4px); }
 
 .btn--primary {
-  background: linear-gradient(150deg, var(--accent-glow), var(--accent));
+  background: var(--accent-bright);
   border-color: transparent;
   color: #1a0805;
   font-weight: 700;
   box-shadow: 0 0 0 1px rgba(255,122,72,0.4), 0 14px 40px -12px rgba(217,64,42,0.6);
 }
-.btn--primary:hover { background: linear-gradient(150deg, #ff855a, var(--accent-bright)); border-color: transparent; color: #1a0805; box-shadow: 0 0 0 1px rgba(255,140,90,0.6), 0 18px 50px -10px rgba(255,106,61,0.7); }
+.btn--primary:hover { background: #ff855a; border-color: transparent; color: #1a0805; box-shadow: 0 0 0 1px rgba(255,140,90,0.6), 0 18px 50px -10px rgba(255,106,61,0.7); }
 
 .btn--ghost { border-color: transparent; padding-inline: 0; }
 .btn--ghost:hover { background: transparent; color: var(--accent-bright); }
