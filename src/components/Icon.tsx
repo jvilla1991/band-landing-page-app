@@ -123,8 +123,8 @@ const ICONS: Record<IconName, JSX.Element> = {
   ),
   facebook: (
     <Svg>
-      <path d="M14.5 8.5H13c-0.8 0-1.5 0.6-1.5 1.5v10" />
-      <path d="M9.5 12.5h5" />
+      <path d="M14.5 6H13c-0.8 0-1.5 0.6-1.5 1.5v10" />
+      <path d="M9.5 10h5" />
     </Svg>
   ),
   discord: (

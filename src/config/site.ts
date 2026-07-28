@@ -44,7 +44,7 @@ export interface YourAreaBulletin {
 export interface YourAreaComment {
   user: string
   date: string
-  /** Renders as animated gradient text when the "2005 jank" toggle is on. */
+  /** Renders in the accent color when the "2005 jank" toggle is on. */
   glitter: boolean
   text: string
 }
