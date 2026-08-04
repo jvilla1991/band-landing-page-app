@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { site } from '../config/site'
 import { shopApi } from '../config/shop'
-import type { ShopProduct, ShopVariant } from '../config/shop'
+import type { ShopImage, ShopProduct, ShopVariant } from '../config/shop'
 import useReveal from '../hooks/useReveal'
 import Icon from '../components/Icon'
 import '../styles/store.css'
@@ -14,6 +14,7 @@ function fallbackProducts(): ShopProduct[] {
     name: p.name,
     price: p.price,
     imageUrl: p.image,
+    images: [] as ShopImage[],
     variants: [] as ShopVariant[],
   }))
 }
@@ -28,6 +29,7 @@ function normalizeProducts(raw: unknown): ShopProduct[] {
   return raw.map((p) => ({
     ...(p as ShopProduct),
     variants: Array.isArray((p as ShopProduct).variants) ? (p as ShopProduct).variants : [],
+    images: Array.isArray((p as ShopProduct).images) ? (p as ShopProduct).images : [],
   }))
 }
 
@@ -42,6 +44,10 @@ function uniqueInOrder(values: (string | null | undefined)[]): string[] {
 function fmtPrice(n: number): string {
   return Number.isInteger(n) ? `$${n}` : `$${n.toFixed(2)}`
 }
+
+/* Auto-advance is decorative — skip it entirely for reduced-motion users. */
+const prefersReducedMotion =
+  typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
 function deriveType(name: string): string {
   const n = name.toLowerCase()
@@ -81,6 +87,40 @@ function ProductCard({ product }: { product: ShopProduct }) {
   const displayName = product.name.split('|')[0].trim()
   const type = deriveType(displayName)
 
+  /* Mockup gallery: Printify renders one mockup set per color group, so show
+     the selected variant's set (front/back/…); fall back to every image when
+     nothing is tagged (old backend data), and to the single card image before
+     the gallery-aware backend is deployed. */
+  const allImages: ShopImage[] =
+    product.images && product.images.length > 0
+      ? product.images
+      : product.imageUrl
+        ? [{ src: product.imageUrl }]
+        : []
+  const forSelected =
+    selected?.printifyId != null
+      ? allImages.filter((im) => im.variantIds?.includes(selected.printifyId as number))
+      : []
+  const gallery = forSelected.length > 0 ? forSelected : allImages
+
+  const [imgIdx, setImgIdx] = useState(0)
+  const [paused, setPaused] = useState(false)
+  const count = gallery.length
+  /* A color switch can shrink the gallery — never index past the end. */
+  const safeIdx = count > 0 ? Math.min(imgIdx, count - 1) : 0
+
+  useEffect(() => {
+    setImgIdx(0)
+  }, [color])
+
+  /* Slow auto-rotate through the shots; hover/focus pauses it so it never
+     fights someone actually looking at the photos. */
+  useEffect(() => {
+    if (paused || prefersReducedMotion || count < 2) return
+    const timer = window.setInterval(() => setImgIdx((i) => (i + 1) % count), 4000)
+    return () => window.clearInterval(timer)
+  }, [paused, count])
+
   async function buy() {
     if (!selected || buying) return
     setBuying(true)
@@ -96,9 +136,18 @@ function ProductCard({ product }: { product: ShopProduct }) {
 
   return (
     <article className="prod">
-      <div className="prod__art">
-        {product.imageUrl ? (
-          <img src={product.imageUrl} alt={displayName} />
+      <div
+        className="prod__art"
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
+        onFocus={() => setPaused(true)}
+        onBlur={() => setPaused(false)}
+      >
+        {count > 0 ? (
+          <img
+            src={gallery[safeIdx].src}
+            alt={count > 1 ? `${displayName} — photo ${safeIdx + 1} of ${count}` : displayName}
+          />
         ) : (
           <div className="ph">
             <div style={{ width: 30, height: 30 }}>
@@ -108,6 +157,37 @@ function ProductCard({ product }: { product: ShopProduct }) {
             <br />
             art coming soon
           </div>
+        )}
+        {count > 1 && (
+          <>
+            <button
+              type="button"
+              className="prod__nav prod__nav--prev"
+              aria-label="Previous photo"
+              onClick={() => setImgIdx((safeIdx + count - 1) % count)}
+            >
+              <Icon name="arrow" />
+            </button>
+            <button
+              type="button"
+              className="prod__nav prod__nav--next"
+              aria-label="Next photo"
+              onClick={() => setImgIdx((safeIdx + 1) % count)}
+            >
+              <Icon name="arrow" />
+            </button>
+            <div className="prod__dots">
+              {gallery.map((im, i) => (
+                <button
+                  key={im.src}
+                  type="button"
+                  className={'prod__dot' + (i === safeIdx ? ' sel' : '')}
+                  aria-label={`Photo ${i + 1}`}
+                  onClick={() => setImgIdx(i)}
+                />
+              ))}
+            </div>
+          </>
         )}
       </div>
       <div className="prod__body">

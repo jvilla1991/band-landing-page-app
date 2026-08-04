@@ -37,6 +37,34 @@
 }
 .prod__art .ph svg { margin: 0 auto 12px; opacity: 0.5; width: 30px; height: 30px; }
 
+/* ---- card photo carousel (front/back mockups) ---- */
+.prod__nav {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 1;
+  width: 32px; height: 32px; border-radius: 50%; padding: 0;
+  border: 1px solid var(--line-2); background: color-mix(in srgb, var(--bg-1) 78%, transparent);
+  color: var(--text-dim); display: grid; place-items: center; cursor: pointer;
+  opacity: 0; transition: all .3s var(--ease);
+}
+.prod__art:hover .prod__nav, .prod__nav:focus-visible { opacity: 1; }
+.prod__nav:hover { border-color: var(--accent-line); color: var(--text); }
+.prod__nav svg { width: 14px; height: 14px; }
+.prod__nav--prev { left: 10px; }
+.prod__nav--prev svg { transform: rotate(180deg); }
+.prod__nav--next { right: 10px; }
+@media (hover: none) { .prod__nav { opacity: 1; } }
+
+.prod__dots {
+  position: absolute; bottom: 10px; left: 0; right: 0; z-index: 1;
+  display: flex; justify-content: center; gap: 6px;
+}
+.prod__dot {
+  width: 7px; height: 7px; border-radius: 50%; border: 0; padding: 0;
+  background: var(--text-faint); opacity: 0.55; cursor: pointer;
+  transition: all .3s var(--ease);
+}
+.prod__dot:hover { opacity: 0.9; }
+.prod__dot.sel { background: var(--accent-bright); opacity: 1; }
+
 .prod__body { padding: 18px 18px 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
 .prod__type { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent-bright); }
 .prod__row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
