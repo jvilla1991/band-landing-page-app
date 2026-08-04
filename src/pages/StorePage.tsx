@@ -3,7 +3,10 @@ import { site } from '../config/site'
 import { shopApi } from '../config/shop'
 import type { ShopImage, ShopProduct, ShopVariant } from '../config/shop'
 import useReveal from '../hooks/useReveal'
+import useCart from '../hooks/useCart'
 import Icon from '../components/Icon'
+import CartDrawer from '../components/CartDrawer'
+import type { CartLine } from '../components/CartDrawer'
 import '../styles/store.css'
 
 /* Static site.ts products, mapped into the live API's shape as the
@@ -59,7 +62,7 @@ function deriveType(name: string): string {
   return 'Merch'
 }
 
-function ProductCard({ product }: { product: ShopProduct }) {
+function ProductCard({ product, onAdd }: { product: ShopProduct; onAdd: (variantId: number) => void }) {
   const hasVariants = product.variants.length > 0
   const sizes = uniqueInOrder(product.variants.map((v) => v.size))
   const colors = uniqueInOrder(product.variants.map((v) => v.color))
@@ -132,6 +135,14 @@ function ProductCard({ product }: { product: ShopProduct }) {
       setBuyErr("Checkout didn't start — try again in a minute.")
       setBuying(false)
     }
+  }
+
+  const [added, setAdded] = useState(false)
+  function addToCart() {
+    if (!selected) return
+    onAdd(selected.id)
+    setAdded(true)
+    window.setTimeout(() => setAdded(false), 1400)
   }
 
   return (
@@ -233,19 +244,38 @@ function ProductCard({ product }: { product: ShopProduct }) {
         )}
         <div className="prod__buy">
           {hasVariants ? (
-            <button
-              className="btn btn--primary"
-              type="button"
-              disabled={buying || !selected}
-              onClick={() => void buy()}
-            >
-              {buying ? 'Redirecting…' : `Buy — ${fmtPrice(selected?.price ?? product.price)}`}
-              {!buying && (
-                <span className="arr" style={{ width: 16, height: 16, display: 'inline-block' }}>
-                  <Icon name="arrow" />
-                </span>
-              )}
-            </button>
+            <>
+              <button
+                className="btn btn--primary"
+                type="button"
+                disabled={buying || !selected}
+                onClick={() => void buy()}
+              >
+                {buying ? 'Redirecting…' : `Buy — ${fmtPrice(selected?.price ?? product.price)}`}
+                {!buying && (
+                  <span className="arr" style={{ width: 16, height: 16, display: 'inline-block' }}>
+                    <Icon name="arrow" />
+                  </span>
+                )}
+              </button>
+              <button
+                className={'btn prod__addbtn' + (added ? ' prod__addbtn--added' : '')}
+                type="button"
+                disabled={!selected}
+                onClick={addToCart}
+              >
+                {added ? (
+                  <>
+                    Added
+                    <span style={{ width: 14, height: 14, display: 'inline-block' }}>
+                      <Icon name="check" />
+                    </span>
+                  </>
+                ) : (
+                  'Add to cart'
+                )}
+              </button>
+            </>
           ) : (
             <span className="prod__soon">
               <i />
@@ -294,11 +324,53 @@ function StorePage() {
   const [products, setProducts] = useState<ShopProduct[] | null>(null)
   const [success, setSuccess] = useState(isSuccessHash)
 
+  const cart = useCart()
+  const [cartOpen, setCartOpen] = useState(false)
+  const [checkingOut, setCheckingOut] = useState(false)
+  const [cartErr, setCartErr] = useState<string | null>(null)
+
+  /* Join saved cart entries against the live catalog; a line with no variant
+     is stale (discontinued since it was added) and blocks checkout until removed. */
+  const catalogReady = products !== null
+  const lines: CartLine[] = cart.entries.map((entry) => {
+    for (const product of products ?? []) {
+      const variant = product.variants.find((v) => v.id === entry.variantId)
+      if (variant) return { entry, product, variant }
+    }
+    return { entry }
+  })
+
   useEffect(() => {
     const onHashChange = () => setSuccess(isSuccessHash())
     window.addEventListener('hashchange', onHashChange)
     return () => window.removeEventListener('hashchange', onHashChange)
   }, [])
+
+  /* Landing on the Stripe success page means the cart was bought — empty it. */
+  useEffect(() => {
+    if (success) {
+      cart.clear()
+      setCartOpen(false)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [success])
+
+  async function checkoutCart() {
+    if (checkingOut) return
+    const validLines = lines.filter((l) => l.variant)
+    if (validLines.length === 0) return
+    setCheckingOut(true)
+    setCartErr(null)
+    try {
+      const { url } = await shopApi.checkout(
+        validLines.map((l) => ({ variantId: l.entry.variantId, quantity: l.entry.quantity })),
+      )
+      window.location.href = url
+    } catch {
+      setCartErr("Checkout didn't start — try again in a minute.")
+      setCheckingOut(false)
+    }
+  }
 
   useEffect(() => {
     let on = true
@@ -358,7 +430,7 @@ function StorePage() {
           ) : (
             <div className="shop__grid">
               {products.map((p) => (
-                <ProductCard key={p.id} product={p} />
+                <ProductCard key={p.id} product={p} onAdd={cart.add} />
               ))}
             </div>
           )}
@@ -371,6 +443,28 @@ function StorePage() {
           <span>{store.shippingNote}</span>
         </div>
       </div>
+
+      <button
+        type="button"
+        className="cartfab"
+        aria-label={`Open cart — ${cart.count} ${cart.count === 1 ? 'item' : 'items'}`}
+        onClick={() => setCartOpen(true)}
+      >
+        <Icon name="cart" />
+        {cart.count > 0 && <span className="cartfab__count">{cart.count > 99 ? '99+' : cart.count}</span>}
+      </button>
+
+      <CartDrawer
+        open={cartOpen}
+        onClose={() => setCartOpen(false)}
+        lines={lines}
+        catalogReady={catalogReady}
+        onSetQuantity={cart.setQuantity}
+        onRemove={cart.remove}
+        onCheckout={() => void checkoutCart()}
+        checkingOut={checkingOut}
+        error={cartErr}
+      />
     </main>
   )
 }
