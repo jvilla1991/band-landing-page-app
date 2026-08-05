@@ -1,6 +1,7 @@
 import { site } from '../config/site'
 import useReveal from '../hooks/useReveal'
 import Icon from './Icon'
+import PhotoCarousel from './PhotoCarousel'
 
 function AboutEPK() {
   const ref = useReveal()
@@ -13,20 +14,24 @@ function AboutEPK() {
         <h2 className="section-title">{about.genre}</h2>
         <div className="about__grid">
           <div>
-            <div className="photo">
-              {site.assets.pressPhoto ? (
-                <img src={site.assets.pressPhoto} alt={`${site.artistName} press photo`} />
-              ) : (
-                <div className="ph">
-                  <div style={{ width: 30, height: 30 }}>
-                    <Icon name="image" />
+            {about.photos.length > 0 ? (
+              <PhotoCarousel photos={about.photos} />
+            ) : (
+              <div className="photo">
+                {site.assets.pressPhoto ? (
+                  <img src={site.assets.pressPhoto} alt={`${site.artistName} press photo`} />
+                ) : (
+                  <div className="ph">
+                    <div style={{ width: 30, height: 30 }}>
+                      <Icon name="image" />
+                    </div>
+                    Press photo
+                    <br />
+                    coming soon
                   </div>
-                  Press photo
-                  <br />
-                  coming soon
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
           </div>
           <div className="bio">
             <p className="lead">{about.lead}</p>

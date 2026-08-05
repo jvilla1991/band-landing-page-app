@@ -395,7 +395,7 @@
    photo and the copy to opposite edges of the content column. */
 @media (min-width: 880px) {
   .about__grid {
-    grid-template-columns: minmax(0, 380px) minmax(0, 480px);
+    grid-template-columns: minmax(0, 500px) minmax(0, 460px);
     justify-content: center;
     align-items: start;
   }
@@ -410,6 +410,38 @@
 .photo img { width: 100%; height: 100%; object-fit: cover; }
 .photo .ph { color: var(--text-faint); font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; text-align: center; line-height: 2; }
 .photo .ph svg { margin: 0 auto 10px; opacity: 0.5; width: 30px; height: 30px; }
+
+/* ---- band photo carousel (About) ----
+   4:3, not the 4:5 of the old single press shot: the landscape frames are
+   natively 4:3 so they crop to nothing, and one of them has a member against
+   each edge — a taller frame would cut them out of their own photo. */
+.photo--carousel { aspect-ratio: 4 / 3; }
+.pcar__nav {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 1;
+  width: 32px; height: 32px; border-radius: 50%; padding: 0;
+  border: 1px solid var(--line-2); background: color-mix(in srgb, var(--bg-1) 78%, transparent);
+  color: var(--text-dim); display: grid; place-items: center; cursor: pointer;
+  opacity: 0; transition: all .3s var(--ease);
+}
+.photo--carousel:hover .pcar__nav, .pcar__nav:focus-visible { opacity: 1; }
+.pcar__nav:hover { border-color: var(--accent-line); color: var(--text); }
+.pcar__nav svg { width: 14px; height: 14px; }
+.pcar__nav--prev { left: 10px; }
+.pcar__nav--prev svg { transform: rotate(180deg); }
+.pcar__nav--next { right: 10px; }
+@media (hover: none) { .pcar__nav { opacity: 1; } }
+
+.pcar__dots {
+  position: absolute; bottom: 10px; left: 0; right: 0; z-index: 1;
+  display: flex; justify-content: center; gap: 6px;
+}
+.pcar__dot {
+  width: 7px; height: 7px; border-radius: 50%; border: 0; padding: 0;
+  background: var(--text-faint); opacity: 0.55; cursor: pointer;
+  transition: all .3s var(--ease);
+}
+.pcar__dot:hover { opacity: 0.9; }
+.pcar__dot.sel { background: var(--accent-bright); opacity: 1; }
 
 .bio p { color: var(--text-dim); font-size: 1.06rem; line-height: 1.7; margin: 0 0 18px; text-wrap: pretty; }
 .bio p.lead { color: var(--text); font-size: 1.18rem; }
