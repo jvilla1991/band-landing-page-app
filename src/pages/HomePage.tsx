@@ -24,7 +24,7 @@ function Listen() {
 
 function HomePage() {
   return (
-    <main>
+    <main className="home">
       <Hero />
       <VideoEmbed />
       <ReleaseBand />

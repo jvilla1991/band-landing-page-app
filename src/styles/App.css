@@ -104,9 +104,6 @@
 
 /* ---- featured video (sits just under the hero emblem) ---- */
 .videosec { padding-top: clamp(28px, 6vw, 56px); }
-/* Centered as a block, echoing the hero directly above it — the frame is
-   narrower than the content column, so left-aligning it reads as a mistake. */
-.videosec .wrap { text-align: center; }
 .ytframe {
   margin: 26px auto 0; max-width: 880px;
   aspect-ratio: 16 / 9; position: relative;
@@ -133,6 +130,35 @@
 }
 .ytframe__poster:hover .ytframe__play { background: var(--accent-bright); color: #1a0805; }
 .ytframe__play svg { width: 26px; height: 26px; margin-left: 3px; }
+
+/* ============================================================
+   HOMEPAGE — one centered column
+   Every section reads as a centered stack under the centered hero.
+   Scoped to .home so these same components stay left-aligned if
+   they're ever reused on another page.
+   ============================================================ */
+.home .section > .wrap { text-align: center; }
+
+/* These heads are flex space-between but hold a single child. */
+.home .links-head { justify-content: center; }
+
+/* Release: cover and copy each centered in their own grid track. */
+.home .release__body { align-items: center; }
+.home .release__cta { justify-content: center; }
+
+/* Centered body copy needs a readable measure — full-column centered
+   lines are the thing that actually hurts readability, not centering. */
+.home .bio { max-width: 58ch; margin-inline: auto; }
+/* A left rule under centered text reads as a mistake. */
+.home .quote { border-left: 0; padding-left: 0; }
+.home .epk { justify-content: center; }
+
+/* Contact: the 520px card track sat at the left of the content area. */
+.home .contact__grid { justify-content: center; }
+.home .ccard { align-items: center; }
+
+/* Track rows are [play | title | time] — centering them breaks the row. */
+.home .player { text-align: left; }
 
 /* bloom behind emblem: element still rendered, hidden in the flat theme */
 .hero__bloom { display: none; }
