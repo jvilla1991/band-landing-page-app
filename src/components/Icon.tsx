@@ -25,6 +25,7 @@ export type IconName =
   | 'note'
   | 'image'
   | 'disc'
+  | 'cart'
 
 interface SvgProps {
   filled?: boolean
@@ -197,6 +198,12 @@ const ICONS: Record<IconName, JSX.Element> = {
     <Svg>
       <circle cx={12} cy={12} r={8.5} />
       <circle cx={12} cy={12} r={2} />
+    </Svg>
+  ),
+  cart: (
+    <Svg>
+      <path d="M5.2 8h13.6l-1.2 11H6.4z" />
+      <path d="M9 10.5V6.8a3 3 0 0 1 6 0v3.7" />
     </Svg>
   ),
 }
