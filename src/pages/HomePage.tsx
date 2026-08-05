@@ -1,6 +1,7 @@
 import { site } from '../config/site'
 import useReveal from '../hooks/useReveal'
 import Hero from '../components/Hero'
+import VideoEmbed from '../components/VideoEmbed'
 import ReleaseBand from '../components/ReleaseBand'
 import DemoPlayer from '../components/DemoPlayer'
 import LinksGrid from '../components/LinksGrid'
@@ -23,8 +24,9 @@ function Listen() {
 
 function HomePage() {
   return (
-    <main>
+    <main className="home">
       <Hero />
+      <VideoEmbed />
       <ReleaseBand />
       <Listen />
       <AboutEPK />
