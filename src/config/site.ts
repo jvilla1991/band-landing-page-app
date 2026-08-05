@@ -71,6 +71,18 @@ export interface YourAreaConfig {
   commentCount: number
 }
 
+/** One band photo in the About carousel. */
+export interface PressPhoto {
+  src: string
+  alt: string
+  /**
+   * CSS object-position for the 4:3 frame. The landscape shots are natively
+   * 4:3 so they need none; portrait shots get cropped top and bottom, so they
+   * point at the band rather than the default centre.
+   */
+  focus?: string
+}
+
 export interface SiteConfig {
   artistName: string
   tagline: string
@@ -103,6 +115,8 @@ export interface SiteConfig {
     genre: string
     lead: string
     body: string[]
+    /** Carousel in the About section; falls back to assets.pressPhoto when empty. */
+    photos: PressPhoto[]
   }
   press: { quote: string; source: string }[]
   pressKit: { label: string; note: string; href: string }
@@ -151,7 +165,7 @@ export const site: SiteConfig = {
 
   video: {
     youtubeId: '7Ex2os54pPA',
-    title: 'Moonlight — Teaser',
+    title: 'Moonlight(Teaser)',
   },
 
   tracks: [
@@ -183,6 +197,13 @@ export const site: SiteConfig = {
   about: {
     genre: 'Independent ambient-metalcore',
     lead: 'VILLXIN is the embraced duality of being human.',
+    /* 4:3 frame: the two landscape shots fill it exactly, the portrait one is
+       cropped top/bottom and pulled down so the band stays in frame. */
+    photos: [
+      { src: '/images/villxin-7.jpg', alt: 'villxin seated under a graffitied bridge' },
+      { src: '/images/villxin-3.jpg', alt: 'villxin on a bridge over the river' },
+      { src: '/images/villxin-16.jpg', alt: 'villxin in front of a stone tower', focus: 'center 62%' },
+    ],
     body: [
       'Driven by a percussive low end, but without sacrificing the crispness that guitar brings to metal, villxin sits where ambient texture meets the weight of metal and metalcore. Tracks open like scenes from a dark romance movie gone right.',
       'The roots of Villxin trace back as early as 2019. Now, highly collaborative and unsigned, the project is releasing its first body of work in 2026.',

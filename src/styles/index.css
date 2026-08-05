@@ -114,16 +114,21 @@ button { font-family: inherit; cursor: pointer; }
   font-weight: 400;
   letter-spacing: 0.42em;
   text-transform: uppercase;
-  color: var(--accent);
+  /* accent-bright, not accent: the darker brick red read as faded against
+     the near-black background, and the other eyebrows already use bright */
+  color: var(--accent-bright);
+  text-shadow: 0 0 18px rgba(255, 106, 61, 0.35);
   display: inline-flex;
   align-items: center;
   gap: 12px;
 }
-.eyebrow::before {
+/* Rules on both sides so the label stays symmetrical when centered. */
+.eyebrow::before,
+.eyebrow::after {
   content: "";
   width: 28px;
   height: 1px;
-  background: var(--accent-line);
+  background: var(--accent-glow);
 }
 
 .section-title {

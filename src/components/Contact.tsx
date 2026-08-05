@@ -20,7 +20,7 @@ function Contact() {
             <a
               className="btn btn--primary"
               href={`mailto:${c.bookingEmail}?subject=${site.artistName}%20booking`}
-              style={{ marginTop: 8, alignSelf: 'flex-start' }}
+              style={{ marginTop: 8 }}
             >
               Email for booking
               <span className="arr" style={{ width: 16, height: 16, display: 'inline-block' }}>
