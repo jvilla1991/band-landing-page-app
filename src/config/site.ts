@@ -91,6 +91,11 @@ export interface SiteConfig {
     /** disabled -> rendered as a non-clickable button (e.g. pre-save not open yet). */
     primaryCta: { label: string; href: string; disabled?: boolean }
   }
+  /** Featured YouTube video shown under the hero. Empty youtubeId hides the section. */
+  video: {
+    youtubeId: string
+    title: string
+  }
   tracks: Track[]
   streaming: LinkItem[]
   social: LinkItem[]
@@ -142,6 +147,11 @@ export const site: SiteConfig = {
     releaseDate: '2026.08.14',
     releaseDateLabel: 'Aug 14, 2026',
     primaryCta: { label: 'Pre-save', href: 'https://hypeddit.com/qq17sv' },
+  },
+
+  video: {
+    youtubeId: '7Ex2os54pPA',
+    title: 'Moonlight — Teaser',
   },
 
   tracks: [

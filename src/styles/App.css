@@ -102,6 +102,38 @@
 .hero { position: relative; min-height: 100svh; display: flex; align-items: center; overflow: hidden; padding: 80px 0 72px; text-align: center; }
 .hero__inner { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; }
 
+/* ---- featured video (sits just under the hero emblem) ---- */
+.videosec { padding-top: clamp(28px, 6vw, 56px); }
+/* Centered as a block, echoing the hero directly above it — the frame is
+   narrower than the content column, so left-aligning it reads as a mistake. */
+.videosec .wrap { text-align: center; }
+.ytframe {
+  margin: 26px auto 0; max-width: 880px;
+  aspect-ratio: 16 / 9; position: relative;
+  border: 1px solid var(--line-2); border-radius: var(--radius-lg);
+  overflow: hidden; background: var(--bg-2);
+}
+.ytframe iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.ytframe__poster {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  padding: 0; border: 0; background: transparent; cursor: pointer; display: block;
+}
+.ytframe__poster img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  opacity: 0.85; transition: transform .6s var(--ease), opacity .6s var(--ease);
+}
+.ytframe__poster:hover img { transform: scale(1.02); opacity: 1; }
+.ytframe__play {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 74px; height: 74px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: color-mix(in srgb, var(--bg-1) 72%, transparent);
+  border: 1px solid var(--accent-line); color: var(--accent-bright);
+  transition: all .3s var(--ease);
+}
+.ytframe__poster:hover .ytframe__play { background: var(--accent-bright); color: #1a0805; }
+.ytframe__play svg { width: 26px; height: 26px; margin-left: 3px; }
+
 /* bloom behind emblem: element still rendered, hidden in the flat theme */
 .hero__bloom { display: none; }
 
