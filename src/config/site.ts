@@ -165,7 +165,7 @@ export const site: SiteConfig = {
 
   video: {
     youtubeId: '7Ex2os54pPA',
-    title: 'Moonlight — Teaser',
+    title: 'Moonlight(Teaser)',
   },
 
   tracks: [
