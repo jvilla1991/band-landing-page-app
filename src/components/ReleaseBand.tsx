@@ -36,7 +36,7 @@ function ReleaseBand() {
             <h3 className="release__title">{rel.title}</h3>
             <p className="release__date">
               {out ? (
-                <>Out now</>
+                <>OUT NOW</>
               ) : (
                 <>
                   Coming <b>{rel.releaseDateLabel}</b> · {rel.releaseDate}

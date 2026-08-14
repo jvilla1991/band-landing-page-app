@@ -157,33 +157,33 @@ export const site: SiteConfig = {
   latestRelease: {
     type: 'Debut Single',
     title: 'Moonlight',
-    status: 'coming-soon',
+    status: 'out',
     releaseDate: '2026.08.14',
     releaseDateLabel: 'Aug 14, 2026',
-    primaryCta: { label: 'Pre-save', href: 'https://hypeddit.com/qq17sv' },
+    primaryCta: { label: 'Listen', href: 'https://hypeddit.com/qq17sv' },
   },
 
   video: {
-    youtubeId: '7Ex2os54pPA',
-    title: 'Moonlight(Teaser)',
+    youtubeId: 'dQThSKpCsqo',
+    title: 'Moonlight',
   },
 
   tracks: [
-    { title: 'Moonlight', note: 'Demo · out Aug 14, 2026', src: '/audio/Moonlight (Demo).wav' },
+    { title: 'Moonlight', note: 'OUT NOW', src: '/audio/Moonlight (Demo).wav' },
     { title: 'Freed From Chains', note: 'Demo · mid September', src: '/audio/Freed From Chains (Demo).wav' },
     { title: 'Up In Smoke', note: 'Demo · coming soon', src: '/audio/Up In Smoke (Demo).wav' },
   ],
 
   /* href empty -> renders as "coming soon" / disabled */
   streaming: [
-    { id: 'spotify', label: 'Spotify', href: '' },
-    { id: 'apple', label: 'Apple Music', href: '' },
-    { id: 'amazon', label: 'Amazon Music', href: '' },
-    { id: 'tidal', label: 'Tidal', href: '' },
-    { id: 'deezer', label: 'Deezer', href: '' },
+    { id: 'spotify', label: 'Spotify', href: 'https://open.spotify.com/artist/501rAry5BPwJJ6uHVIEtNT?si=HcH9HFFtRDGBCadeiBHngw' },
+    { id: 'apple', label: 'Apple Music', href: 'https://music.apple.com/us/album/moonlight-single/6792107944' },
+    { id: 'amazon', label: 'Amazon Music', href: 'https://music.amazon.com/albums/B0H9BKWKB2' },
+    { id: 'tidal', label: 'Tidal', href: 'https://tidal.com/album/544127000' },
+    { id: 'deezer', label: 'Deezer', href: 'https://www.deezer.com/us/album/1031883392' },
     { id: 'soundcloud', label: 'SoundCloud', href: '' },
     { id: 'bandcamp', label: 'Bandcamp', href: '' },
-    { id: 'youtube', label: 'YouTube', href: '' },
+    { id: 'youtube', label: 'YouTube', href: 'https://music.youtube.com/watch?v=x4ELPTeRoQw' },
   ],
 
   social: [
