@@ -173,7 +173,7 @@
             </div>
           </div>
           <div className="ftr__bottom">
-            <span className="ftr__cp">© {year} {site.artistName} — All rights reserved</span>
+            <span className="ftr__cp">© {year} {site.artistName} - All rights reserved - Jeremy Villa</span>
             <button className="totop" type="button" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>Back to top<span className="up" style={{ width: 14, height: 14, display: "inline-block" }}><Icon name="arrowUp" /></span></button>
           </div>
         </div>
