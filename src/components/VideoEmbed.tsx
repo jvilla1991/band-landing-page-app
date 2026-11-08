@@ -18,7 +18,6 @@ function VideoEmbed() {
   return (
     <section className="section videosec" id="watch">
       <div className="wrap reveal" ref={ref}>
-        <span className="eyebrow">Watch</span>
         <h2 className="section-title">{video.title}</h2>
         <div className="ytframe">
           {playing ? (

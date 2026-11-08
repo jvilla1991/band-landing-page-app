@@ -9,7 +9,6 @@ function Contact() {
   return (
     <section className="section" id="contact">
       <div className="wrap reveal" ref={ref}>
-        <span className="eyebrow">Contact</span>
         <h2 className="section-title">Get in touch</h2>
         <div className="contact__grid">
           <div className="ccard">

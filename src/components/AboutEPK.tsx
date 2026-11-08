@@ -50,7 +50,7 @@ function AboutEPK() {
 
             <div className="epk">
               <div className="epk__tx">
-                <h4>{site.pressKit.label}</h4>
+                <h3>{site.pressKit.label}</h3>
                 <p>{site.pressKit.note}</p>
               </div>
               <button className="btn" type="button" disabled aria-label="Press kit coming soon">

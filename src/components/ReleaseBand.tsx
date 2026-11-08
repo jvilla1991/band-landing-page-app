@@ -32,8 +32,8 @@ function ReleaseBand() {
             )}
           </div>
           <div className="release__body">
-            <span className="release__type">{rel.type}</span>
             <h3 className="release__title">{rel.title}</h3>
+            <span className="release__type">{rel.type}</span>
             <p className="release__date">
               {out ? (
                 <>OUT NOW</>
