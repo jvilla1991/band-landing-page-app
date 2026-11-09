@@ -1,7 +1,8 @@
-import { FormEvent, useCallback, useEffect, useState } from 'react'
-import { ApiError } from '../config/api'
+import { FormEvent, PointerEvent as ReactPointerEvent, useCallback, useEffect, useRef, useState } from 'react'
+import { API_BASE, ApiError } from '../config/api'
 import { SiteFlags, Show, ShowStatus, DEFAULT_FLAGS, fetchFlags } from '../config/siteFlags'
 import { ShowInput, adminApi, adminLogin, clearAdminToken, getAdminToken } from '../config/siteAdmin'
+import { AboutPhotoDto } from '../config/sitePhotos'
 
 /* Owner console at #/admin: page flags, shows list, store sync.
    Not linked from anywhere — reachable only by URL, gated by the ADMIN login. */
@@ -325,6 +326,261 @@ function StorePanel() {
   )
 }
 
+/* Parse a CSS object-position string ("50% 62%", "center 62%", "left top") into
+   x/y percentages for the focal-point handle. Anything unparseable centres. */
+function parseFocus(focus?: string | null): { x: number; y: number } {
+  const def = { x: 50, y: 50 }
+  if (!focus) return def
+  const tokens = focus.trim().split(/\s+/)
+  const word: Record<string, number> = { left: 0, top: 0, center: 50, right: 100, bottom: 100 }
+  const toPct = (t: string | undefined, fallback: number): number => {
+    if (t === undefined) return fallback
+    if (t in word) return word[t]
+    const n = parseFloat(t)
+    return Number.isFinite(n) ? Math.max(0, Math.min(100, n)) : fallback
+  }
+  return { x: toPct(tokens[0], 50), y: toPct(tokens[1], 50) }
+}
+
+/** The focal-point "crop" editor for one photo: a live 4:3 carousel frame with
+    a draggable handle. Dragging sets object-position, previewed exactly as the
+    public carousel renders it. */
+function PhotoEditor({
+  photo,
+  onSaved,
+  onError,
+}: {
+  photo: AboutPhotoDto
+  onSaved: () => void
+  onError: (msg: string) => void
+}) {
+  const [alt, setAlt] = useState(photo.alt)
+  const [point, setPoint] = useState(() => parseFocus(photo.focus))
+  const [busy, setBusy] = useState(false)
+  const frameRef = useRef<HTMLDivElement>(null)
+  const dragging = useRef(false)
+
+  // reset local state when a different row is opened
+  useEffect(() => {
+    setAlt(photo.alt)
+    setPoint(parseFocus(photo.focus))
+  }, [photo.id, photo.alt, photo.focus])
+
+  const focus = `${Math.round(point.x)}% ${Math.round(point.y)}%`
+
+  const moveTo = useCallback((clientX: number, clientY: number) => {
+    const el = frameRef.current
+    if (!el) return
+    const r = el.getBoundingClientRect()
+    const x = ((clientX - r.left) / r.width) * 100
+    const y = ((clientY - r.top) / r.height) * 100
+    setPoint({ x: Math.max(0, Math.min(100, x)), y: Math.max(0, Math.min(100, y)) })
+  }, [])
+
+  const onPointerDown = (e: ReactPointerEvent<HTMLDivElement>) => {
+    dragging.current = true
+    e.currentTarget.setPointerCapture(e.pointerId)
+    moveTo(e.clientX, e.clientY)
+  }
+  const onPointerMove = (e: ReactPointerEvent<HTMLDivElement>) => {
+    if (dragging.current) moveTo(e.clientX, e.clientY)
+  }
+  const onPointerUp = (e: ReactPointerEvent<HTMLDivElement>) => {
+    dragging.current = false
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId)
+    } catch {
+      /* pointer already released */
+    }
+  }
+
+  const save = async () => {
+    setBusy(true)
+    try {
+      await adminApi.updatePhoto(photo.id, { alt: alt.trim(), focus, sortOrder: photo.sortOrder })
+      onSaved()
+    } catch (err) {
+      onError(err instanceof ApiError ? err.message : 'Save failed')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div className="adm__photoedit">
+      <div
+        className="adm__focusframe"
+        ref={frameRef}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+      >
+        <img src={API_BASE + photo.imageUrl} alt="" style={{ objectPosition: focus }} draggable={false} />
+        <span className="adm__focusdot" style={{ left: `${point.x}%`, top: `${point.y}%` }} aria-hidden="true" />
+      </div>
+      <div className="adm__focusctl">
+        <p className="adm__hint">Drag the dot to choose which part of the photo stays in frame.</p>
+        <label className="adm__focuslabel">
+          Alt text
+          <input value={alt} onChange={(e) => setAlt(e.target.value)} maxLength={200} />
+        </label>
+        <code className="adm__focusval">object-position: {focus}</code>
+        <button className="btn btn--primary" type="button" onClick={save} disabled={busy}>
+          {busy ? 'Saving…' : 'Save crop'}
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function PhotosPanel() {
+  const [photos, setPhotos] = useState<AboutPhotoDto[]>([])
+  const [alt, setAlt] = useState('')
+  const [file, setFile] = useState<File | null>(null)
+  const [openId, setOpenId] = useState<number | null>(null)
+  const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
+  const fileRef = useRef<HTMLInputElement>(null)
+
+  const reload = useCallback(() => {
+    adminApi
+      .allPhotos()
+      .then((list) => setPhotos([...list].sort((a, b) => a.sortOrder - b.sortOrder)))
+      .catch(() => setError('Could not load photos'))
+  }, [])
+  useEffect(reload, [reload])
+
+  const upload = async (e: FormEvent) => {
+    e.preventDefault()
+    if (!file) {
+      setError('Choose an image first')
+      return
+    }
+    setBusy(true)
+    setError('')
+    try {
+      const fd = new FormData()
+      fd.append('file', file)
+      fd.append('alt', alt.trim())
+      await adminApi.createPhoto(fd)
+      setAlt('')
+      setFile(null)
+      if (fileRef.current) fileRef.current.value = ''
+      reload()
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : 'Upload failed')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const remove = async (p: AboutPhotoDto) => {
+    if (!window.confirm(`Delete this photo${p.alt ? ` (“${p.alt}”)` : ''}?`)) return
+    setError('')
+    try {
+      await adminApi.deletePhoto(p.id)
+      if (openId === p.id) setOpenId(null)
+      reload()
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : 'Delete failed')
+    }
+  }
+
+  // Swap sortOrder with the neighbour in the given direction, then persist both.
+  const move = async (index: number, dir: -1 | 1) => {
+    const a = photos[index]
+    const b = photos[index + dir]
+    if (!a || !b) return
+    setError('')
+    try {
+      await adminApi.updatePhoto(a.id, { alt: a.alt, focus: a.focus ?? null, sortOrder: b.sortOrder })
+      await adminApi.updatePhoto(b.id, { alt: b.alt, focus: b.focus ?? null, sortOrder: a.sortOrder })
+      reload()
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : 'Reorder failed')
+    }
+  }
+
+  return (
+    <section className="adm__panel">
+      <h2>About photos</h2>
+      <p className="adm__hint">The carousel in the About section. Upload a photo, then drag its crop point.</p>
+      <form className="adm__photoform" onSubmit={upload}>
+        <label>
+          Image file
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+          />
+        </label>
+        <label>
+          Alt text
+          <input
+            value={alt}
+            onChange={(e) => setAlt(e.target.value)}
+            placeholder="villxin on a bridge over the river"
+            maxLength={200}
+          />
+        </label>
+        <button className="btn btn--primary" type="submit" disabled={busy}>
+          {busy ? 'Uploading…' : 'Add photo'}
+        </button>
+      </form>
+      {error && <p className="adm__err">{error}</p>}
+      {photos.length === 0 ? (
+        <p className="adm__hint">No photos yet — the About section uses the built-in fallback images.</p>
+      ) : (
+        <ul className="adm__photos">
+          {photos.map((p, i) => (
+            <li key={p.id}>
+              <div className="adm__photorow">
+                <img
+                  className="adm__thumb"
+                  src={API_BASE + p.imageUrl}
+                  alt=""
+                  style={p.focus ? { objectPosition: p.focus } : undefined}
+                />
+                <span className="adm__photoalt">{p.alt || <em>No alt text</em>}</span>
+                <span className="adm__photoops">
+                  <button type="button" onClick={() => move(i, -1)} disabled={i === 0} aria-label="Move up">
+                    ↑
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => move(i, 1)}
+                    disabled={i === photos.length - 1}
+                    aria-label="Move down"
+                  >
+                    ↓
+                  </button>
+                  <button type="button" onClick={() => setOpenId(openId === p.id ? null : p.id)}>
+                    {openId === p.id ? 'Close' : 'Crop'}
+                  </button>
+                  <button type="button" className="danger" onClick={() => remove(p)}>
+                    Delete
+                  </button>
+                </span>
+              </div>
+              {openId === p.id && (
+                <PhotoEditor
+                  photo={p}
+                  onSaved={() => {
+                    setOpenId(null)
+                    reload()
+                  }}
+                  onError={setError}
+                />
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  )
+}
+
 function AdminPage() {
   const [authed, setAuthed] = useState(() => Boolean(getAdminToken()))
 
@@ -359,6 +615,7 @@ function AdminPage() {
             </div>
             <FlagsPanel />
             <ShowsPanel />
+            <PhotosPanel />
             <StorePanel />
           </>
         )}
