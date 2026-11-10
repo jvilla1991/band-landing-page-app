@@ -130,6 +130,26 @@ export interface ReleaseLocksResult {
   failures: string[]
 }
 
+/** Where each subscriber stands with Mailchimp (band-api's Subscriber.MailchimpStatus). */
+export type MailchimpStatus = 'PENDING' | 'LEGACY' | 'SYNCED' | 'REJECTED'
+
+export interface MailingListStatus {
+  /** false until MAILCHIMP_API_KEY and MAILCHIMP_AUDIENCE_ID are set on band-api */
+  enabled: boolean
+  counts: Record<MailchimpStatus, number>
+  total: number
+}
+
+export interface MailingListSyncResult {
+  synced: number
+  rejected: number
+  /** temporary failures (Mailchimp down / rate limited) — still queued */
+  retryLater: number
+  /** "email: reason" for addresses Mailchimp refused this run (first 20) */
+  rejections: string[]
+  counts: Record<MailchimpStatus, number>
+}
+
 export const adminApi = {
   setFlag: (name: keyof SiteFlags, enabled: boolean) =>
     adminFetch<SiteFlags>(`/api/site/admin/flags/${name}`, { method: 'PUT', body: { enabled } }),
@@ -145,4 +165,9 @@ export const adminApi = {
   deletePhoto: (id: number) => adminFetch<void>(`/api/site/admin/photos/${id}`, { method: 'DELETE' }),
   syncStore: () => adminFetch<SyncResult>('/api/shop/sync', { method: 'POST' }),
   releaseLocks: () => adminFetch<ReleaseLocksResult>('/api/shop/release-locks', { method: 'POST' }),
+  mailingListStatus: () => adminFetch<MailingListStatus>('/api/mailing-list/admin/status'),
+  syncMailingList: (includeLegacy: boolean) =>
+    adminFetch<MailingListSyncResult>(`/api/mailing-list/admin/sync?includeLegacy=${includeLegacy}`, {
+      method: 'POST',
+    }),
 }

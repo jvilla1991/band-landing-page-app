@@ -375,6 +375,9 @@
 .mlmsg.is-err { color: var(--err); }
 .mlmsg.is-err .dot { background: var(--err); }
 .mlmsg.is-field { color: var(--err); justify-content: flex-start; padding-left: 4px; }
+.mlnote { margin: 0; color: var(--text-faint); font-size: 0.8rem; text-align: center; }
+/* honeypot: moved off-screen rather than display:none, which some bots skip */
+.mltrap { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
 
 .mlresult { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 8px 0; animation: fadeup .8s var(--ease); }
 @keyframes fadeup { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
@@ -595,6 +598,14 @@
 .adm__unlock { border: 1px solid var(--line-2); padding-inline: 20px; }
 .adm__unlock:hover { border-color: var(--accent-line); }
 
+/* mailing list panel */
+.adm__counts { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin: 0 0 12px; }
+.adm__counts > div { border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; }
+.adm__counts dt { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-faint); }
+.adm__counts dd { margin: 6px 0 0; font-family: var(--font-display); font-size: 1.5rem; font-weight: 800; color: var(--text); }
+.adm__warn { color: var(--warn); }
+.adm__rejections { margin: 10px 0 0; padding-left: 18px; color: var(--text-dim); font-size: 0.85rem; overflow-wrap: anywhere; }
+
 .adm__login { display: flex; flex-direction: column; gap: 14px; max-width: 360px; margin-top: 20px; }
 .adm__login label, .adm__grid label { display: flex; flex-direction: column; gap: 6px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-faint); }
 .adm__login input, .adm__grid input, .adm__grid select {
@@ -625,7 +636,7 @@
 
 .adm__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 @media (max-width: 560px) { .adm__grid { grid-template-columns: 1fr; } }
-.adm__formactions { display: flex; gap: 14px; align-items: center; margin-top: 16px; }
+.adm__formactions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-top: 16px; }
 
 .adm__shows { list-style: none; margin: 18px 0 0; padding: 0; }
 .adm__shows li { display: flex; align-items: center; gap: 14px; padding: 10px 0; border-top: 1px solid var(--line); font-size: 0.94rem; }
