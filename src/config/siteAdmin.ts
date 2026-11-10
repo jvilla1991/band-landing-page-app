@@ -1,5 +1,6 @@
 import { API_BASE, ApiError } from './api'
 import { SiteFlags, Show, ShowStatus } from './siteFlags'
+import { AboutPhotoDto } from './sitePhotos'
 
 /* Admin-side API client. Deliberately separate from fetchJson: that helper
    attaches the YourArea community token, while everything here uses the
@@ -50,6 +51,33 @@ async function adminFetch<T>(path: string, options: { method?: string; body?: un
   return data as T
 }
 
+/* Sibling of adminFetch for multipart uploads. adminFetch forces a JSON
+   Content-Type, which would break a file upload: the browser must set
+   Content-Type itself so it can include the multipart boundary. So this helper
+   attaches only the admin Authorization header and hands the FormData straight
+   to fetch. */
+async function adminUpload<T>(path: string, formData: FormData): Promise<T> {
+  const headers: Record<string, string> = {}
+  const token = getAdminToken()
+  if (token) headers.Authorization = `Bearer ${token}`
+
+  const res = await fetch(API_BASE + path, { method: 'POST', headers, body: formData })
+
+  let data: unknown = null
+  try {
+    data = await res.json()
+  } catch {
+    /* empty body */
+  }
+
+  if (!res.ok) {
+    if (res.status === 401 || res.status === 403) clearAdminToken()
+    const err = (data ?? {}) as { code?: string; error?: string }
+    throw new ApiError(res.status, err.code ?? 'UNKNOWN', err.error ?? `HTTP ${res.status}`)
+  }
+  return data as T
+}
+
 /* ---- auth ---- */
 
 export async function adminLogin(email: string, password: string): Promise<void> {
@@ -88,6 +116,13 @@ export interface SyncResult {
   deactivated: number
 }
 
+/** Editable fields of an About photo (the bytes are set once at upload). */
+export interface PhotoInput {
+  alt: string
+  focus?: string | null
+  sortOrder: number
+}
+
 export interface ReleaseLocksResult {
   released: number
   alreadyUnlocked: number
@@ -103,6 +138,11 @@ export const adminApi = {
   updateShow: (id: number, input: ShowInput) =>
     adminFetch<Show>(`/api/site/admin/shows/${id}`, { method: 'PUT', body: input }),
   deleteShow: (id: number) => adminFetch<void>(`/api/site/admin/shows/${id}`, { method: 'DELETE' }),
+  allPhotos: () => adminFetch<AboutPhotoDto[]>('/api/site/admin/photos'),
+  createPhoto: (formData: FormData) => adminUpload<AboutPhotoDto>('/api/site/admin/photos', formData),
+  updatePhoto: (id: number, input: PhotoInput) =>
+    adminFetch<AboutPhotoDto>(`/api/site/admin/photos/${id}`, { method: 'PUT', body: input }),
+  deletePhoto: (id: number) => adminFetch<void>(`/api/site/admin/photos/${id}`, { method: 'DELETE' }),
   syncStore: () => adminFetch<SyncResult>('/api/shop/sync', { method: 'POST' }),
   releaseLocks: () => adminFetch<ReleaseLocksResult>('/api/shop/release-locks', { method: 'POST' }),
 }

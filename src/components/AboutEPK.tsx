@@ -1,4 +1,7 @@
-import { site } from '../config/site'
+import { useEffect, useState } from 'react'
+import { API_BASE } from '../config/api'
+import { site, type PressPhoto } from '../config/site'
+import { fetchAboutPhotos } from '../config/sitePhotos'
 import useReveal from '../hooks/useReveal'
 import Icon from './Icon'
 import PhotoCarousel from './PhotoCarousel'
@@ -7,6 +10,28 @@ function AboutEPK() {
   const ref = useReveal()
   const about = site.about
 
+  /* Photos come from the API (owner-managed). If the fetch fails OR returns an
+     empty list, fall back to the static site.about.photos so the public site
+     still renders a carousel when the backend is down or unseeded. */
+  const [photos, setPhotos] = useState<PressPhoto[]>(about.photos)
+
+  useEffect(() => {
+    let active = true
+    fetchAboutPhotos()
+      .then((dtos) => {
+        if (!active || dtos.length === 0) return
+        setPhotos(
+          dtos.map((p) => ({ src: API_BASE + p.imageUrl, alt: p.alt, focus: p.focus ?? undefined })),
+        )
+      })
+      .catch(() => {
+        /* keep the static fallback already in state */
+      })
+    return () => {
+      active = false
+    }
+  }, [])
+
   return (
     <section className="section" id="about">
       <div className="wrap reveal" ref={ref}>
@@ -14,8 +39,8 @@ function AboutEPK() {
         <h2 className="section-title">{about.genre}</h2>
         <div className="about__grid">
           <div>
-            {about.photos.length > 0 ? (
-              <PhotoCarousel photos={about.photos} />
+            {photos.length > 0 ? (
+              <PhotoCarousel photos={photos} />
             ) : (
               <div className="photo">
                 {site.assets.pressPhoto ? (
