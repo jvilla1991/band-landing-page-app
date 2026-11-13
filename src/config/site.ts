@@ -291,7 +291,7 @@ export const site: SiteConfig = {
   seo: {
     title: 'villxin — independent ambient-metalcore',
     description:
-      'villxin — independent ambient-metalcore. Devotion that burns down to the root. Debut single coming 2026. Join the mailing list.',
+      'villxin — independent ambient-metalcore. Devotion that burns down to the root. Debut single Moonlight out now. Join the mailing list.',
     url: 'https://villxin.com',
   },
 }

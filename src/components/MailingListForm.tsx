@@ -2,16 +2,18 @@ import { useRef, useState, FormEvent } from 'react'
 import { API_BASE } from '../config/api'
 import Icon from './Icon'
 
-type Status = 'idle' | 'loading' | 'success' | 'duplicate' | 'error'
+type Status = 'idle' | 'loading' | 'success' | 'duplicate' | 'limited' | 'error'
 
 // syntactic email check (client-side gate before submit)
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-async function subscribeRequest(email: string): Promise<number> {
+/* `website` is a honeypot: band-api drops any signup where it isn't empty (and
+   still answers 200, so a bot learns nothing). People never see the field. */
+async function subscribeRequest(email: string, website: string): Promise<number> {
   const res = await fetch(`${API_BASE}/api/subscribe`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email }),
+    body: JSON.stringify({ email, website }),
   })
   return res.status
 }
@@ -21,6 +23,7 @@ function MailingListForm() {
   const [status, setStatus] = useState<Status>('idle')
   const [fieldErr, setFieldErr] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
+  const trapRef = useRef<HTMLInputElement>(null)
 
   const busy = status === 'loading'
   const done = status === 'success' || status === 'duplicate'
@@ -42,11 +45,13 @@ function MailingListForm() {
     setFieldErr('')
     setStatus('loading')
     try {
-      const code = await subscribeRequest(val)
+      const code = await subscribeRequest(val, trapRef.current?.value ?? '')
       if (code >= 200 && code < 300) {
         setStatus('success')
       } else if (code === 409) {
         setStatus('duplicate')
+      } else if (code === 429) {
+        setStatus('limited')
       } else if (code === 400) {
         setStatus('idle')
         setFieldErr("That email doesn't look right.")
@@ -78,8 +83,8 @@ function MailingListForm() {
         <div className="mlresult__h">{dup ? 'Already on the list' : "You're on the list"}</div>
         <p className="mlresult__p">
           {dup
-            ? "This email is already subscribed — you won't miss the first release."
-            : "We'll only email when there's something real: the first release, and nothing else."}
+            ? "This email is already subscribed — you won't miss what's next."
+            : "We'll only email when there's something real: new music and band news. Unsubscribe anytime."}
         </p>
         <button type="button" className="btn btn--ghost mlresult__redo" onClick={reset}>
           Use a different email
@@ -108,9 +113,15 @@ function MailingListForm() {
             onChange={(e) => {
               setEmail(e.target.value)
               if (fieldErr) setFieldErr('')
-              if (status === 'error') setStatus('idle')
+              if (status === 'error' || status === 'limited') setStatus('idle')
             }}
           />
+        </div>
+        {/* honeypot — off-screen, out of the tab order, hidden from screen readers.
+            Not named "website"/"url" so browser autofill leaves it alone. */}
+        <div className="mltrap" aria-hidden="true">
+          <label htmlFor="ml-hp">Leave this empty</label>
+          <input id="ml-hp" ref={trapRef} type="text" name="ml_hp" tabIndex={-1} autoComplete="off" defaultValue="" />
         </div>
         <button type="submit" className="btn btn--primary mlform__submit" disabled={busy}>
           {busy ? (
@@ -139,7 +150,15 @@ function MailingListForm() {
             Something went wrong — try again.
           </span>
         )}
+        {status === 'limited' && !fieldErr && (
+          <span className="mlmsg is-err">
+            <span className="dot" />
+            Lots of signups right now — try again in a few minutes.
+          </span>
+        )}
       </div>
+
+      <p className="mlnote">New music and news only. Sent with Mailchimp; unsubscribe anytime.</p>
     </form>
   )
 }
