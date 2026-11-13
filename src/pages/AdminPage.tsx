@@ -1,10 +1,17 @@
 import { FormEvent, PointerEvent as ReactPointerEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { API_BASE, ApiError } from '../config/api'
 import { SiteFlags, Show, ShowStatus, DEFAULT_FLAGS, fetchFlags } from '../config/siteFlags'
-import { ShowInput, adminApi, adminLogin, clearAdminToken, getAdminToken } from '../config/siteAdmin'
+import {
+  MailingListStatus,
+  ShowInput,
+  adminApi,
+  adminLogin,
+  clearAdminToken,
+  getAdminToken,
+} from '../config/siteAdmin'
 import { AboutPhotoDto } from '../config/sitePhotos'
 
-/* Owner console at #/admin: page flags, shows list, store sync.
+/* Owner console at #/admin: page flags, shows list, About photos, mailing list sync, store sync.
    Not linked from anywhere — reachable only by URL, gated by the ADMIN login. */
 
 const EMPTY_SHOW: ShowInput = { showDate: '', venue: '', city: '', ticketUrl: '', note: '', status: 'UPCOMING' }
@@ -326,6 +333,127 @@ function StorePanel() {
   )
 }
 
+/* Mailchimp's free plan holds every send once the audience passes this many
+   contacts (unsubscribed ones count too, so treat it as a ceiling, not a target). */
+const MAILCHIMP_FREE_LIMIT = 250
+
+function MailingListPanel() {
+  const [status, setStatus] = useState<MailingListStatus | null>(null)
+  const [result, setResult] = useState('')
+  const [rejections, setRejections] = useState<string[]>([])
+  const [error, setError] = useState('')
+  const [busy, setBusy] = useState<'retry' | 'import' | null>(null)
+
+  const reload = useCallback(() => {
+    adminApi
+      .mailingListStatus()
+      .then(setStatus)
+      .catch((err) => setError(err instanceof ApiError ? err.message : 'Could not load mailing list status'))
+  }, [])
+  useEffect(reload, [reload])
+
+  const run = async (includeLegacy: boolean) => {
+    setBusy(includeLegacy ? 'import' : 'retry')
+    setResult('')
+    setRejections([])
+    setError('')
+    try {
+      const r = await adminApi.syncMailingList(includeLegacy)
+      const parts = [`Done — ${plural(r.synced, 'subscriber')} sent to Mailchimp.`]
+      if (r.rejected) parts.push(`Mailchimp refused ${r.rejected}.`)
+      if (r.retryLater) parts.push(`${r.retryLater} couldn't reach Mailchimp and are still queued — try again later.`)
+      setResult(parts.join(' '))
+      setRejections(r.rejections)
+    } catch (err) {
+      setError(err instanceof ApiError ? `Sync failed: ${err.message}` : 'Sync failed')
+    } finally {
+      setBusy(null)
+      reload()
+    }
+  }
+
+  const importLegacy = () => {
+    const n = status?.counts.LEGACY ?? 0
+    const ok = window.confirm(
+      `Import ${plural(n, 'early subscriber')} into Mailchimp?\n\n` +
+        'They signed up when the list promised "the first release, and nothing else". ' +
+        'They will be tagged "legacy-first-release" — send them the notice email explaining the wider list ' +
+        '(with a clear unsubscribe) before any other campaign.\n\n' +
+        'This cannot be undone from here.',
+    )
+    if (ok) void run(true)
+  }
+
+  const c = status?.counts
+  const overLimit = (status?.total ?? 0) > MAILCHIMP_FREE_LIMIT
+
+  return (
+    <section className="adm__panel">
+      <h2>Mailing list</h2>
+      {!status ? (
+        <p className="adm__hint">{error ? '' : 'Loading…'}</p>
+      ) : (
+        <>
+          <p className="adm__hint">
+            {status.enabled
+              ? 'New signups are copied to Mailchimp as they arrive. Campaigns are written and sent in Mailchimp.'
+              : 'Mailchimp sync is off — band-api has no MAILCHIMP_API_KEY / MAILCHIMP_AUDIENCE_ID. Signups are still saved.'}
+          </p>
+          <dl className="adm__counts">
+            <div>
+              <dt>In Mailchimp</dt>
+              <dd>{c?.SYNCED ?? 0}</dd>
+            </div>
+            <div>
+              <dt>Waiting to sync</dt>
+              <dd>{c?.PENDING ?? 0}</dd>
+            </div>
+            <div>
+              <dt>Early, not imported</dt>
+              <dd>{c?.LEGACY ?? 0}</dd>
+            </div>
+            <div>
+              <dt>Refused</dt>
+              <dd>{c?.REJECTED ?? 0}</dd>
+            </div>
+          </dl>
+          <p className={'adm__hint' + (overLimit ? ' adm__warn' : '')}>
+            {status.total} of {MAILCHIMP_FREE_LIMIT} on the free plan
+            {overLimit && ' — over the limit: Mailchimp will hold every send until contacts are archived'}.
+          </p>
+          <div className="adm__formactions">
+            <button
+              className="btn btn--primary"
+              type="button"
+              onClick={() => run(false)}
+              disabled={!status.enabled || busy !== null || (c?.PENDING ?? 0) === 0}
+            >
+              {busy === 'retry' ? 'Syncing…' : 'Retry waiting signups'}
+            </button>
+            <button
+              className="btn btn--ghost adm__unlock"
+              type="button"
+              onClick={importLegacy}
+              disabled={!status.enabled || busy !== null || (c?.LEGACY ?? 0) === 0}
+            >
+              {busy === 'import' ? 'Importing…' : 'Import early subscribers'}
+            </button>
+          </div>
+        </>
+      )}
+      {error && <p className="adm__err">{error}</p>}
+      {result && <p className="adm__result">{result}</p>}
+      {rejections.length > 0 && (
+        <ul className="adm__rejections">
+          {rejections.map((r) => (
+            <li key={r}>{r}</li>
+          ))}
+        </ul>
+      )}
+    </section>
+  )
+}
+
 /* Parse a CSS object-position string ("50% 62%", "center 62%", "left top") into
    x/y percentages for the focal-point handle. Anything unparseable centres. */
 function parseFocus(focus?: string | null): { x: number; y: number } {
@@ -616,6 +744,7 @@ function AdminPage() {
             <FlagsPanel />
             <ShowsPanel />
             <PhotosPanel />
+            <MailingListPanel />
             <StorePanel />
           </>
         )}
