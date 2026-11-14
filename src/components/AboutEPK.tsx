@@ -44,7 +44,7 @@ function AboutEPK() {
             ) : (
               <div className="photo">
                 {site.assets.pressPhoto ? (
-                  <img src={site.assets.pressPhoto} alt={`${site.artistName} press photo`} />
+                  <img src={site.assets.pressPhoto} alt={`${site.artistName} press photo`} loading="lazy" />
                 ) : (
                   <div className="ph">
                     <div style={{ width: 30, height: 30 }}>
