@@ -64,14 +64,16 @@ function AboutEPK() {
               <p key={p}>{p}</p>
             ))}
 
-            <div className="quotes">
-              {site.press.map((q) => (
-                <blockquote className="quote" key={q.quote}>
-                  <p>“{q.quote}”</p>
-                  <cite>{q.source}</cite>
-                </blockquote>
-              ))}
-            </div>
+            {site.press.length > 0 && (
+              <div className="quotes">
+                {site.press.map((q) => (
+                  <blockquote className="quote" key={q.quote}>
+                    <p>“{q.quote}”</p>
+                    <cite>{q.source}</cite>
+                  </blockquote>
+                ))}
+              </div>
+            )}
 
             <div className="epk">
               <div className="epk__tx">

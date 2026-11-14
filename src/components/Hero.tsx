@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { site } from '../config/site'
+import Icon from './Icon'
 
 function Hero() {
   const emblemRef = useRef<HTMLDivElement>(null)
@@ -45,6 +46,15 @@ function Hero() {
             <span className="hero__wordmark--text">{site.artistName}</span>
           )}
         </h1>
+        <p className="hero__tag">{site.tagline}</p>
+        <div className="hero__cta">
+          <a className="btn btn--primary" href="#release">
+            Listen
+            <span className="arr" style={{ width: 16, height: 16, display: 'inline-block' }}>
+              <Icon name="arrow" />
+            </span>
+          </a>
+        </div>
         <div className="hero__emblem" ref={emblemRef}>
           <img src={site.assets.emblem} alt={`${site.artistName} emblem`} />
         </div>

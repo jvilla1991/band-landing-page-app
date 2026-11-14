@@ -210,10 +210,9 @@ export const site: SiteConfig = {
     ],
   },
 
-  press: [
-    { quote: 'something something Darkside.', source: 'Emporer Palpatine' },
-    { quote: 'They always win sometimes.', source: 'Jesus H. Christ' },
-  ],
+  /* No real press quotes yet. Keep this empty rather than shipping placeholder
+     testimonials on the EPK — AboutEPK hides the quotes block when it's empty. */
+  press: [],
 
   pressKit: {
     label: 'Press / EPK Kit',
