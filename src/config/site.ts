@@ -150,7 +150,7 @@ export const site: SiteConfig = {
     emblem: '/images/villxin_heart_transparent_cropped.png',
     wordmark: '/images/title-white-cropped.png',
     coverArt: '/images/moonlight-cover.jpg',
-    pressPhoto: '/images/villxin-press-cropped.png',
+    pressPhoto: '/images/villxin-press-cropped.jpg',
     ogImage: '/images/og-image.jpg',
   },
 
@@ -169,9 +169,9 @@ export const site: SiteConfig = {
   },
 
   tracks: [
-    { title: 'Moonlight', note: 'OUT NOW', src: '/audio/Moonlight (Demo).wav' },
-    { title: 'Freed From Chains', note: 'Demo · mid September', src: '/audio/Freed From Chains (Demo).wav' },
-    { title: 'Up In Smoke', note: 'Demo · coming soon', src: '/audio/Up In Smoke (Demo).wav' },
+    { title: 'Moonlight', note: 'OUT NOW', src: '/audio/Moonlight (Demo).mp3' },
+    { title: 'Freed From Chains', note: 'Demo · mid September', src: '/audio/Freed From Chains (Demo).mp3' },
+    { title: 'Up In Smoke', note: 'Demo · coming soon', src: '/audio/Up In Smoke (Demo).mp3' },
   ],
 
   /* href empty -> renders as "coming soon" / disabled */
@@ -262,7 +262,7 @@ export const site: SiteConfig = {
       hereFor: 'The quiet and the collapse',
       location: 'The space between',
       mood: 'smoldering',
-      song: { title: 'Moonlight', note: 'profile song · demo', src: '/audio/Moonlight (Demo).wav' },
+      song: { title: 'Moonlight', note: 'profile song · demo', src: '/audio/Moonlight (Demo).mp3' },
     },
     blurb: {
       about:
