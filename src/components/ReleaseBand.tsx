@@ -19,7 +19,7 @@ function ReleaseBand() {
         <div className="relband__inner">
           <div className="release__cover">
             {cover ? (
-              <img src={cover} alt={`${rel.title} cover art`} />
+              <img src={cover} alt={`${rel.title} cover art`} loading="lazy" />
             ) : (
               <div className="ph">
                 <div style={{ width: 34, height: 34 }}>

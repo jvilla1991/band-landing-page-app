@@ -11,7 +11,7 @@ function Footer() {
       <div className="wrap ftr__in">
         <div className="ftr__top">
           <div className="ftr__brand">
-            <img src={site.assets.iconMark} alt="" />
+            <img src={site.assets.iconMark} alt="" loading="lazy" />
             <span className="nm">{site.artistName}</span>
           </div>
           <div className="ftr__join">
