@@ -16,10 +16,12 @@
   --line:      rgba(236, 224, 245, 0.09);
   --line-2:    rgba(236, 224, 245, 0.16);
 
-  /* --- text (flat white across all tiers) --- */
+  /* --- text: stepped tiers so secondary/metadata copy reads quieter than
+     primary (restores the hierarchy flagged in the design critique; both
+     dimmed whites stay AA-contrast on the near-black bg) --- */
   --text:      #ffffff;
-  --text-dim:  #ffffff;
-  --text-faint:#ffffff;
+  --text-dim:  rgba(255, 255, 255, 0.72);
+  --text-faint: rgba(255, 255, 255, 0.5);
 
   /* --- accent: molten ember (primary) --- */
   --accent:        #d9402a;

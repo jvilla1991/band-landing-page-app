@@ -55,6 +55,7 @@ function CurrentPage({ page }: { page: Page }) {
 function App() {
   const [page, setPage] = useState<Page>(getPage)
   const [modalOpen, setModalOpen] = useState(false)
+  const [dockAtFoot, setDockAtFoot] = useState(false)
 
   // flags render from last-known state immediately, then refresh from the API;
   // a dead API keeps the cached/default nav rather than blanking tabs
@@ -118,6 +119,19 @@ function App() {
     }
   }, [])
 
+  // Retract the social dock while the footer is in view, so it never floats
+  // over the footer / final content. Reuses the dock's built-in "away" state.
+  useEffect(() => {
+    const footer = document.querySelector('footer')
+    if (!footer) return
+    const io = new IntersectionObserver(
+      ([entry]) => setDockAtFoot(entry.isIntersecting),
+      { rootMargin: '0px 0px -24px 0px' },
+    )
+    io.observe(footer)
+    return () => io.disconnect()
+  }, [page])
+
   return (
     <FlagsContext.Provider value={flags}>
       <ModalContext.Provider value={openModal}>
@@ -125,7 +139,7 @@ function App() {
         <CurrentPage page={page} />
         <Footer />
 
-        <SocialDock hidden={modalOpen} />
+        <SocialDock hidden={modalOpen || dockAtFoot} />
         <MailingListModal open={modalOpen} onClose={closeModal} />
       </ModalContext.Provider>
     </FlagsContext.Provider>
