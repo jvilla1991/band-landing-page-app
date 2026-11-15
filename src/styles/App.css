@@ -435,16 +435,20 @@
 @media (hover: none) { .pcar__nav { opacity: 1; } }
 
 .pcar__dots {
-  position: absolute; bottom: 10px; left: 0; right: 0; z-index: 1;
-  display: flex; justify-content: center; gap: 6px;
+  position: absolute; bottom: 2px; left: 0; right: 0; z-index: 1;
+  display: flex; justify-content: center; gap: 2px;
 }
 .pcar__dot {
-  width: 7px; height: 7px; border-radius: 50%; border: 0; padding: 0;
-  background: var(--text-faint); opacity: 0.55; cursor: pointer;
-  transition: all .3s var(--ease);
+  /* 24px tappable target (WCAG 2.5.8) with a 7px visual dot drawn via ::before */
+  width: 24px; height: 24px; border: 0; padding: 0; background: none;
+  display: grid; place-items: center; cursor: pointer;
 }
-.pcar__dot:hover { opacity: 0.9; }
-.pcar__dot.sel { background: var(--accent-bright); opacity: 1; }
+.pcar__dot::before {
+  content: ""; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--text-faint); opacity: 0.55; transition: all .3s var(--ease);
+}
+.pcar__dot:hover::before { opacity: 0.9; }
+.pcar__dot.sel::before { background: var(--accent-bright); opacity: 1; }
 
 .bio p { color: var(--text-dim); font-size: 1.06rem; line-height: 1.7; margin: 0 0 18px; text-wrap: pretty; }
 .bio p.lead { color: var(--text); font-size: 1.18rem; }
