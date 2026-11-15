@@ -13,7 +13,7 @@ function Listen() {
   return (
     <section className="section" id="listen">
       <div className="wrap reveal" ref={ref}>
-        <h2 className="section-title">Demos</h2>
+        <h2 className="section-title">Listen</h2>
         <DemoPlayer tracks={site.tracks} />
         <LinksGrid title="Where to listen" items={site.streaming} kind="stream" action="Listen" />
       </div>
